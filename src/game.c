@@ -233,6 +233,9 @@ void drawGame(object player, object* cars, int carCount, object* gators, int gat
     ClearBackground(RAYWHITE);
     DrawText(screenText, 10, 10, 20, DARKGRAY);
 
+    // draw river
+    DrawRectangle(0, RIVER_UPPER_BOUNDARY, WINDOW_WIDTH, RIVER_LOWER_BOUNDARY - RIVER_UPPER_BOUNDARY, SKYBLUE);
+
     // Draw street
     DrawRectangle(0, STREET_UPPER_BOUNDARY, WINDOW_WIDTH, STREET_LOWER_BOUNDARY - STREET_UPPER_BOUNDARY, DARKGRAY);
     

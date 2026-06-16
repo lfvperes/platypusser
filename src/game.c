@@ -72,13 +72,13 @@ object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemy
         
         // Determine lane range and color based on enemy type
         if (enemyType == 'C') {
-            minLane = 4;
-            maxLane = 6;
+            minLane = 5;
+            maxLane = 8;
             lane = GetRandomValue(minLane, maxLane);
             spawnColor = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
         } else if (enemyType == 'G') {
             minLane = 1;
-            maxLane = 3;
+            maxLane = 4;
             lane = GetRandomValue(minLane, maxLane);
             spawnColor = DARKGREEN;
         } else {
@@ -94,6 +94,8 @@ object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemy
             case 4: laneY = LANE_4; break;
             case 5: laneY = LANE_5; break;
             case 6: laneY = LANE_6; break;
+            case 7: laneY = LANE_7; break;
+            case 8: laneY = LANE_8; break;
             default: laneY = LANE_1; break; // Fallback
         }
 
@@ -110,6 +112,8 @@ object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemy
                     case 4: testLaneY = LANE_4; break;
                     case 5: testLaneY = LANE_5; break;
                     case 6: testLaneY = LANE_6; break;
+                    case 7: testLaneY = LANE_7; break;
+                    case 8: testLaneY = LANE_8; break;
                     default: testLaneY = LANE_1; break; // Fallback
                 }
                 

@@ -63,8 +63,8 @@ int isSpawnZoneOccupied(object* cars, int carCount, int laneY) {
     return 0;
 }
 
-object* spawnCar(object* cars, int* carCount, int carChance) {
-    if (*carCount < 10 && GetRandomValue(0, 100) < carChance) {
+object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance) {
+    if (*enemyCount < 10 && GetRandomValue(0, 100) < enemyChance) {
         int lane = GetRandomValue(1, 3);
         int laneY;
 
@@ -76,7 +76,7 @@ object* spawnCar(object* cars, int* carCount, int carChance) {
         }
 
         // Check if the spawn zone of the lane is occupied
-        if (isSpawnZoneOccupied(cars, *carCount, laneY)) {
+        if (isSpawnZoneOccupied(enemies, *enemyCount, laneY)) {
             // Try to find another free lane
             int foundFreeLane = 0;
             for (int i = 1; i <= 3; i++) {
@@ -86,27 +86,27 @@ object* spawnCar(object* cars, int* carCount, int carChance) {
                     case 2: testLaneY = LANE_2; break;
                     case 3: testLaneY = LANE_3; break;
                 }
-                if (!isSpawnZoneOccupied(cars, *carCount, testLaneY)) {
+                if (!isSpawnZoneOccupied(enemies, *enemyCount, testLaneY)) {
                     laneY = testLaneY;
                     foundFreeLane = 1;
                     break;
                 }
             }
             if (!foundFreeLane) {
-                return cars; // Skip spawning if all spawn zones are occupied
+                return enemies; // Skip spawning if all spawn zones are occupied
             }
         }
 
         // Spawn the car on the free lane
-        cars = realloc(cars, (*carCount + 1) * sizeof(object));
-        cars[*carCount].position = (Vector2){0, laneY};
-        cars[*carCount].velocity = (Vector2){CAR_SPEED, 0};
-        cars[*carCount].width = CAR_LENGTH;
-        cars[*carCount].height = CAR_HEIGHT;
-        cars[*carCount].color = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
-        (*carCount)++;
+        enemies = realloc(enemies, (*enemyCount + 1) * sizeof(object));
+        enemies[*enemyCount].position = (Vector2){0, laneY};
+        enemies[*enemyCount].velocity = (Vector2){CAR_SPEED, 0};
+        enemies[*enemyCount].width = CAR_LENGTH;
+        enemies[*enemyCount].height = CAR_HEIGHT;
+        enemies[*enemyCount].color = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
+        (*enemyCount)++;
     }
-    return cars;
+    return enemies;
 }
 
 void resetGame(object* player, object** cars, int* carCount) {
@@ -123,7 +123,7 @@ void resetGame(object* player, object** cars, int* carCount) {
     screenText = "";
 }
 
-void updateGame(object* player, object** cars, int* carCount) {
+void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount) {
     if (!isGameOver) {
         screenText = "";
         handlePlayerMovement(player);
@@ -138,7 +138,7 @@ void updateGame(object* player, object** cars, int* carCount) {
         }
 
         // Spawn new cars
-        *cars = spawnCar(*cars, carCount, CAR_CHANCE);
+        *cars = spawnEnemy(*cars, carCount, CAR_CHANCE);
     } else {
         // Stop cars when game is over
         for (int i = 0; i < *carCount; i++) {

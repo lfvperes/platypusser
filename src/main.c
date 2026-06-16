@@ -18,7 +18,7 @@ int main() {
     // Game loop
     while (!WindowShouldClose()) {
         updateGame(&player, &cars, &carCount, &gators, &gatorCount);
-        drawGame(player, cars, carCount);
+        drawGame(player, cars, carCount, gators, gatorCount);
     }
 
     // Cleanup

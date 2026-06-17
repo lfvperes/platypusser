@@ -2,6 +2,12 @@
 #include "character.h"
 #include "street.h"
 
+Color colors[MAX_COLORS_COUNT] = {
+    DARKGRAY, MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, DARKBROWN,
+    GRAY, RED, GOLD, LIME, BLUE, VIOLET, BROWN, LIGHTGRAY, PINK, YELLOW,
+    GREEN, SKYBLUE, PURPLE, BEIGE
+};
+
 int isStreetLaneSpawnOccupied(character* cars, int carCount, int laneY) {
     for (int i = 0; i < carCount; i++) {
         if (cars[i].position.y == laneY && cars[i].position.x < CAR_LENGTH * 2) {

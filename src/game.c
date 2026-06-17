@@ -3,12 +3,6 @@
 #include "street.h"
 #include "river.h"
 
-Color colors[MAX_COLORS_COUNT] = {
-    DARKGRAY, MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, DARKBROWN,
-    GRAY, RED, GOLD, LIME, BLUE, VIOLET, BROWN, LIGHTGRAY, PINK, YELLOW,
-    GREEN, SKYBLUE, PURPLE, BEIGE
-};
-
 int isGameOver = 1; // Start the game in a "game over" state
 char* screenText = "PRESS ENTER TO START";
 float hopTimer = 0.0f;
@@ -58,17 +52,6 @@ void handlePlayerMovement(character* player) {
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
 }
 
-int isSpawnZoneOccupied(character* npcs, int npcCount, int laneY) {
-    for (int i = 0; i < npcCount; i++) {
-        if (npcs[i].position.y == laneY && npcs[i].position.x < CAR_LENGTH * 2) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
-
-
 void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
     // Reset player
     initGame(player);
@@ -96,8 +79,6 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         updateCarPosition(cars, carCount);
         updateGatorPosition(gators, gatorCount);
         updateLogPosition(logs, logCount);
-        
-        
 
         // Check for collisions with cars
         for (int i = 0; i < *carCount; i++) {
@@ -118,7 +99,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
 
         // Spawn new enemies
         *cars = spawnCar(*cars, carCount, CAR_CHANCE);
-        *gators = spawnGator(*gators, gatorCount, *logs, logCount, CAR_CHANCE);        // spawn new logs
+        *gators = spawnGator(*gators, gatorCount, *logs, logCount, CAR_CHANCE);
         *logs = spawnLog(*gators, gatorCount, *logs, logCount, CAR_CHANCE);
     } else {
         // Stop cars when game is over
@@ -128,6 +109,10 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         // Stop gators when game is over
         for (int i = 0; i < *gatorCount; i++) {
             (*gators)[i].velocity.x = 0;
+        }
+        // Stop logs when game is over
+        for (int i = 0; i < *logCount; i++) {
+            (*logs)[i].velocity.x = 0;
         }
 
         // Start or restart the game when ENTER is pressed

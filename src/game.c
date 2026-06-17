@@ -1,5 +1,6 @@
-#include "game.h"
 #include <stdlib.h>
+#include "game.h"
+#include "street.h"
 
 Color colors[MAX_COLORS_COUNT] = {
     DARKGRAY, MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, DARKBROWN,
@@ -12,6 +13,7 @@ char* screenText = "PRESS ENTER TO START";
 float hopTimer = 0.0f;
 int carCount = 0;
 int gatorCount = 0;
+int logCount = 0;
 
 void initGame(character* player) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
@@ -243,7 +245,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         }
 
         // Spawn new enemies
-        *cars = spawnNPC(*cars, carCount, CAR_CHANCE, 'C');
+        *cars = spawnCar(*cars, carCount, CAR_CHANCE);
         *gators = spawnNPC(*gators, gatorCount, CAR_CHANCE, 'G');
         // spawn new logs
         *logs = spawnNPC(*logs, logCount, CAR_CHANCE, 'L');

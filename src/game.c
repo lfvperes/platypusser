@@ -55,34 +55,39 @@ void handlePlayerMovement(object* player) {
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
 }
 
-int isSpawnZoneOccupied(object* cars, int carCount, int laneY) {
-    for (int i = 0; i < carCount; i++) {
-        if (cars[i].position.y == laneY && cars[i].position.x < CAR_LENGTH * 2) {
+int isSpawnZoneOccupied(object* npcs, int npcCount, int laneY) {
+    for (int i = 0; i < npcCount; i++) {
+        if (npcs[i].position.y == laneY && npcs[i].position.x < CAR_LENGTH * 2) {
             return 1;
         }
     }
     return 0;
 }
 
-object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemyType) {
-    if (*enemyCount < 10 && GetRandomValue(0, 100) < enemyChance) {
+object* spawnNPC(object* npcs, int* npcCount, int npcChance, char npcType) {
+    if (*npcCount < 10 && GetRandomValue(0, 100) < npcChance) {
         int lane;
         Color spawnColor;
         int minLane, maxLane;
         
-        // Determine lane range and color based on enemy type
-        if (enemyType == 'C') {
+        // Determine lane range and color based on npc type
+        if (npcType == 'C') {
             minLane = 5;
             maxLane = 8;
             lane = GetRandomValue(minLane, maxLane);
             spawnColor = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
-        } else if (enemyType == 'G') {
+        } else if (npcType == 'G') {
             minLane = 1;
             maxLane = 4;
             lane = GetRandomValue(minLane, maxLane);
             spawnColor = DARKGREEN;
+        } else if (npcType = 'L') {
+            minLane = 1;
+            maxLane = 4;
+            lane = GetRandomValue(minLane, maxLane);
+            spawnColor = MAROON;
         } else {
-            return enemies; // Invalid enemy type
+            return npcs; // Invalid npc type
         }
 
         // Map lane number to Y position
@@ -100,8 +105,8 @@ object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemy
         }
 
         // Check if the spawn zone of the lane is occupied
-        if (isSpawnZoneOccupied(enemies, *enemyCount, laneY)) {
-            // Try to find another free lane (only in appropriate range for this enemy type)
+        if (isSpawnZoneOccupied(npcs, *npcCount, laneY)) {
+            // Try to find another free lane (only in appropriate range for this npc type)
             int foundFreeLane = 0;
             for (int i = minLane; i <= maxLane; i++) {
                 int testLaneY;
@@ -117,30 +122,30 @@ object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemy
                     default: testLaneY = LANE_1; break; // Fallback
                 }
                 
-                if (!isSpawnZoneOccupied(enemies, *enemyCount, testLaneY)) {
+                if (!isSpawnZoneOccupied(npcs, *npcCount, testLaneY)) {
                     laneY = testLaneY;
                     foundFreeLane = 1;
                     break;
                 }
             }
             if (!foundFreeLane) {
-                return enemies; // Skip spawning if all spawn zones are occupied
+                return npcs; // Skip spawning if all spawn zones are occupied
             }
         }
 
-        // Spawn the enemy on the free lane
-        enemies = realloc(enemies, (*enemyCount + 1) * sizeof(object));
-        enemies[*enemyCount].position = (Vector2){0, laneY};
-        enemies[*enemyCount].velocity = (Vector2){CAR_SPEED, 0};
-        enemies[*enemyCount].width = CAR_LENGTH;
-        enemies[*enemyCount].height = CAR_HEIGHT;
-        enemies[*enemyCount].color = spawnColor;
-        (*enemyCount)++;
+        // Spawn the npc on the free lane
+        npcs = realloc(npcs, (*npcCount + 1) * sizeof(object));
+        npcs[*npcCount].position = (Vector2){0, laneY};
+        npcs[*npcCount].velocity = (Vector2){CAR_SPEED, 0};
+        npcs[*npcCount].width = CAR_LENGTH;
+        npcs[*npcCount].height = CAR_HEIGHT;
+        npcs[*npcCount].color = spawnColor;
+        (*npcCount)++;
     }
-    return enemies;
+    return npcs;
 }
 
-void resetGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount) {
+void resetGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount) {
     // Reset player
     initGame(player);
 
@@ -150,13 +155,15 @@ void resetGame(object* player, object** cars, int* carCount, object** gators, in
     *carCount = 0;
     *gators = NULL;
     *gatorCount = 0;
+    *logs = NULL;
+    *logCount = 0;
 
     // Reset game state
     isGameOver = 0;
     screenText = "";
 }
 
-void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount) {
+void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount) {
     if (!isGameOver) {
         screenText = "";
         handlePlayerMovement(player);
@@ -179,7 +186,7 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
                 }
             }
         }
-
+        
         // Update gator positions and remove out-of-bounds
         for (int i = 0; i < *gatorCount; i++) {
             (*gators)[i].position.x += (*gators)[i].velocity.x;
@@ -198,6 +205,25 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
                 }
             }
         }
+        
+        // Update log positions and remove out-of-bounds
+        for (int i = 0; i < *logCount; i++) {
+            (*logs)[i].position.x += (*logs)[i].velocity.x;
+            if ((*logs)[i].position.x > WINDOW_WIDTH) {
+                // Remove log by shifting remaining logs and reallocating
+                for (int j = i; j < *logCount - 1; j++) {
+                    (*logs)[j] = (*logs)[j + 1];
+                }
+                (*logCount)--;
+                i--; // Adjust index since we removed an element
+                if (*logCount > 0) {
+                    *logs = realloc(*logs, *logCount * sizeof(object));
+                } else {
+                    free(*logs);
+                    *logs = NULL;
+                }
+            }
+        }
 
         // Check for collisions with cars
         for (int i = 0; i < *carCount; i++) {
@@ -207,10 +233,20 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
                 break;
             }
         }
+        // check for collisions with gators
+        for (int i = 0; i < *gatorCount; i++) {
+            if (collision(*player, (*gators)[i])) {
+                isGameOver = 1;
+                screenText = "GAME OVER - PRESS ENTER TO RESTART";
+                break;
+            }
+        }
 
         // Spawn new enemies
-        *cars = spawnEnemy(*cars, carCount, CAR_CHANCE, 'C');
-        *gators = spawnEnemy(*gators, gatorCount, CAR_CHANCE, 'G');
+        *cars = spawnNPC(*cars, carCount, CAR_CHANCE, 'C');
+        *gators = spawnNPC(*gators, gatorCount, CAR_CHANCE, 'G');
+        // spawn new logs
+        *logs = spawnNPC(*logs, logCount, CAR_CHANCE, 'L');
     } else {
         // Stop cars when game is over
         for (int i = 0; i < *carCount; i++) {
@@ -223,12 +259,12 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
 
         // Start or restart the game when ENTER is pressed
         if (IsKeyPressed(KEY_ENTER)) {
-            resetGame(player, cars, carCount, gators, gatorCount);
+            resetGame(player, cars, carCount, gators, gatorCount, logs, logCount);
         }
     }
 }
 
-void drawGame(object player, object* cars, int carCount, object* gators, int gatorCount) {
+void drawGame(object player, object* cars, int carCount, object* gators, int gatorCount, object* logs, int logCount) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     DrawText(screenText, 10, 10, 20, DARKGRAY);
@@ -249,6 +285,10 @@ void drawGame(object player, object* cars, int carCount, object* gators, int gat
     // Draw gators
     for (int i = 0; i < gatorCount; i++) {
         DrawRectangleV(gators[i].position, (Vector2){gators[i].width, gators[i].height}, gators[i].color);
+    }
+    // Draw logs
+    for (int i = 0; i < logCount; i++) {
+        DrawRectangleV(logs[i].position, (Vector2){logs[i].width, logs[i].height}, logs[i].color);
     }
     EndDrawing();
 }

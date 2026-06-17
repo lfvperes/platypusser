@@ -39,10 +39,10 @@ extern int gatorCount;
 
 // Function prototypes
 void initGame(object* player);
-void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount);
-void drawGame(object player, object* cars, int carCount, object* gators, int gatorCount);
+void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount);
+void drawGame(object player, object* cars, int carCount, object* gators, int gatorCount, object* logs, int logCount);
 void handlePlayerMovement(object* player);
 object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemyType);
-void resetGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount);
+void resetGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount);
 
 #endif

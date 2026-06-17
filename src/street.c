@@ -17,8 +17,8 @@ character* spawnCar(character* cars, int* carCount, int carChance) {
         Color spawnColor;
         int minLane, maxLane;
         
-        minLane = 5;
-        maxLane = 8;
+        minLane = 1;
+        maxLane = 4;
         lane = GetRandomValue(minLane, maxLane);
         spawnColor = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
 
@@ -67,4 +67,24 @@ character* spawnCar(character* cars, int* carCount, int carChance) {
         (*carCount)++;
     }
     return cars;
+}
+
+void updateCarPosition(character** cars, int* carCount) {
+    for (int i = 0; i < *carCount; i++) {
+        (*cars)[i].position.x += (*cars)[i].velocity.x;
+        if ((*cars)[i].position.x > WINDOW_WIDTH) {
+            // Remove car by shifting remaining cars and reallocating
+            for (int j = i; j < *carCount - 1; j++) {
+                (*cars)[j] = (*cars)[j + 1];
+            }
+            (*carCount)--;
+            i--; // Adjust index since we removed an element
+            if (*carCount > 0) {
+                *cars = realloc(*cars, *carCount * sizeof(character));
+            } else {
+                free(*cars);
+                *cars = NULL;
+            }
+        }
+    }
 }

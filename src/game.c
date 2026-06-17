@@ -171,23 +171,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         handlePlayerMovement(player);
 
         // Update car positions and remove out-of-bounds
-        for (int i = 0; i < *carCount; i++) {
-            (*cars)[i].position.x += (*cars)[i].velocity.x;
-            if ((*cars)[i].position.x > WINDOW_WIDTH) {
-                // Remove car by shifting remaining cars and reallocating
-                for (int j = i; j < *carCount - 1; j++) {
-                    (*cars)[j] = (*cars)[j + 1];
-                }
-                (*carCount)--;
-                i--; // Adjust index since we removed an element
-                if (*carCount > 0) {
-                    *cars = realloc(*cars, *carCount * sizeof(character));
-                } else {
-                    free(*cars);
-                    *cars = NULL;
-                }
-            }
-        }
+        updateCarPosition(cars, carCount);
         
         // Update gator positions and remove out-of-bounds
         for (int i = 0; i < *gatorCount; i++) {

@@ -21,5 +21,6 @@
 
 int isStreetLaneSpawnOccupied(character* cars, int carCount, int laneY);
 character* spawnCar(character* cars, int* carCount, int carChance);
+void updateCarPosition(character** cars, int* carCount);
 
 #endif

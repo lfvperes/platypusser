@@ -20,14 +20,14 @@
 // #define LANE_2 LANE_SIZE * 3
 // #define LANE_3 LANE_SIZE * 5
 // #define LANE_4 LANE_SIZE * 7
-#define LANE_5 LANE_SIZE * 10
-#define LANE_6 LANE_SIZE * 12
-#define LANE_7 LANE_SIZE * 14
-#define LANE_8 LANE_SIZE * 16
+// #define LANE_5 LANE_SIZE * 10
+// #define LANE_6 LANE_SIZE * 12
+// #define LANE_7 LANE_SIZE * 14
+// #define LANE_8 LANE_SIZE * 16
 // #define STREET_UPPER_BOUNDARY WINDOW_HEIGHT/2 - LANE_SIZE
 // #define STREET_LOWER_BOUNDARY WINDOW_HEIGHT
-#define RIVER_UPPER_BOUNDARY LANE_SIZE
-#define RIVER_LOWER_BOUNDARY WINDOW_HEIGHT/2 - 2 * LANE_SIZE
+// #define RIVER_UPPER_BOUNDARY LANE_SIZE
+// #define RIVER_LOWER_BOUNDARY WINDOW_HEIGHT/2 - 2 * LANE_SIZE
 #define CAR_CHANCE 5 // 5% chance to spawn a car each frame
 
 // Global variables

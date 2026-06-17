@@ -18,7 +18,7 @@ int isRiverLaneSpawnOccupied(character* gators, int gatorCount, character* logs,
 
 character* spawnGator(character* gators, int *gatorCount, character* logs, int *logCount, int gatorChance) {
     if (*gatorCount < 10 && GetRandomValue(0, 100) < gatorChance) {
-        int lane, speed, length;
+        int lane, speed = RIVER_LANE_1_SPEED, length;
         Color spawnColor;
         int minLane, maxLane;
         
@@ -26,33 +26,62 @@ character* spawnGator(character* gators, int *gatorCount, character* logs, int *
         minLane = 1;
         maxLane = 4;
         lane = GetRandomValue(minLane, maxLane);
-        speed = GetRandomValue(1, RIVER_MAX_SPEED);
         spawnColor = DARKGREEN;
         length = GATOR_LENGTH;
 
         // Map lane number to Y position
         int laneY;
         switch (lane) {
-            case 1: laneY = RIVER_LANE_1; break;
-            case 2: laneY = RIVER_LANE_2; break;
-            case 3: laneY = RIVER_LANE_3; break;
-            case 4: laneY = RIVER_LANE_4; break;
-            default: laneY = RIVER_LANE_1; break; // Fallback
+            case 1:
+                laneY = RIVER_LANE_1;
+                speed = RIVER_LANE_1_SPEED;
+                break;
+            case 2:
+                laneY = RIVER_LANE_2;
+                speed = RIVER_LANE_2_SPEED;
+                break;
+            case 3:
+                laneY = RIVER_LANE_3;
+                speed = RIVER_LANE_3_SPEED;
+                break;
+            case 4:
+                laneY = RIVER_LANE_4;
+                speed = RIVER_LANE_4_SPEED;
+                break;
+            default:
+                laneY = RIVER_LANE_1;
+                speed = RIVER_LANE_1_SPEED;
+                break; // Fallback
         }
-
-        // Check if the spawn zone of the lane is occupied
-        if (isRiverLaneSpawnOccupied(gators, *gatorCount, logs, *logCount, laneY)) {
-            // Try to find another free lane (only in appropriate range for this npc type)
-            int foundFreeLane = 0;
-            for (int i = minLane; i <= maxLane; i++) {
-                int testLaneY;
-                switch (i) {
-                    case 1: testLaneY = RIVER_LANE_1; break;
-                    case 2: testLaneY = RIVER_LANE_2; break;
-                    case 3: testLaneY = RIVER_LANE_3; break;
-                    case 4: testLaneY = RIVER_LANE_4; break;
-                    default: testLaneY = RIVER_LANE_1; break; // Fallback
-                }
+            
+            // Check if the spawn zone of the lane is occupied
+            if (isRiverLaneSpawnOccupied(gators, *gatorCount, logs, *logCount, laneY)) {
+                // Try to find another free lane (only in appropriate range for this npc type)
+                int foundFreeLane = 0;
+                for (int i = minLane; i <= maxLane; i++) {
+                    int testLaneY;
+                    switch (i) {
+                        case 1:
+                            testLaneY = RIVER_LANE_1;
+                            speed = RIVER_LANE_1_SPEED;
+                            break;
+                        case 2:
+                            testLaneY = RIVER_LANE_2;
+                            speed = RIVER_LANE_2_SPEED;
+                            break;
+                        case 3:
+                            testLaneY = RIVER_LANE_3;
+                            speed = RIVER_LANE_3_SPEED;
+                            break;
+                        case 4:
+                            testLaneY = RIVER_LANE_4;
+                            speed = RIVER_LANE_4_SPEED;
+                            break;
+                        default:
+                            testLaneY = RIVER_LANE_1;
+                            speed = RIVER_LANE_1_SPEED;
+                            break; // Fallback
+                    }
                 
                 if (!isRiverLaneSpawnOccupied(gators, *gatorCount, logs, *logCount, testLaneY)) {
                     laneY = testLaneY;
@@ -80,7 +109,7 @@ character* spawnGator(character* gators, int *gatorCount, character* logs, int *
 
 character* spawnLog(character* gators, int *gatorCount, character* logs, int *logCount, int logChance) {
     if (*logCount < 10 && GetRandomValue(0, 100) < logChance) {
-        int lane, speed, length;
+        int lane, speed = RIVER_LANE_1_SPEED, length;
         Color spawnColor;
         int minLane, maxLane;
         
@@ -88,18 +117,32 @@ character* spawnLog(character* gators, int *gatorCount, character* logs, int *lo
         minLane = 1;
         maxLane = 4;
         lane = GetRandomValue(minLane, maxLane);
-        speed = GetRandomValue(1, RIVER_MAX_SPEED);
         spawnColor = MAROON;
         length = GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
         
         // Map lane number to Y position
         int laneY;
         switch (lane) {
-            case 1: laneY = RIVER_LANE_1; break;
-            case 2: laneY = RIVER_LANE_2; break;
-            case 3: laneY = RIVER_LANE_3; break;
-            case 4: laneY = RIVER_LANE_4; break;
-            default: laneY = RIVER_LANE_1; break; // Fallback
+            case 1:
+                laneY = RIVER_LANE_1;
+                speed = RIVER_LANE_1_SPEED;
+                break;
+            case 2:
+                laneY = RIVER_LANE_2;
+                speed = RIVER_LANE_2_SPEED;
+                break;
+            case 3:
+                laneY = RIVER_LANE_3;
+                speed = RIVER_LANE_3_SPEED;
+                break;
+            case 4:
+                laneY = RIVER_LANE_4;
+                speed = RIVER_LANE_4_SPEED;
+                break;
+            default:
+                laneY = RIVER_LANE_1;
+                speed = RIVER_LANE_1_SPEED;
+                break; // Fallback
         }
 
         // Check if the spawn zone of the lane is occupied
@@ -109,11 +152,26 @@ character* spawnLog(character* gators, int *gatorCount, character* logs, int *lo
             for (int i = minLane; i <= maxLane; i++) {
                 int testLaneY;
                 switch (i) {
-                    case 1: testLaneY = RIVER_LANE_1; break;
-                    case 2: testLaneY = RIVER_LANE_2; break;
-                    case 3: testLaneY = RIVER_LANE_3; break;
-                    case 4: testLaneY = RIVER_LANE_4; break;
-                    default: testLaneY = RIVER_LANE_1; break; // Fallback
+                    case 1:
+                        testLaneY = RIVER_LANE_1;
+                        speed = RIVER_LANE_1_SPEED;
+                        break;
+                    case 2:
+                        testLaneY = RIVER_LANE_2;
+                        speed = RIVER_LANE_2_SPEED;
+                        break;
+                    case 3:
+                        testLaneY = RIVER_LANE_3;
+                        speed = RIVER_LANE_3_SPEED;
+                        break;
+                    case 4:
+                        testLaneY = RIVER_LANE_4;
+                        speed = RIVER_LANE_4_SPEED;
+                        break;
+                    default:
+                        testLaneY = RIVER_LANE_1;
+                        speed = RIVER_LANE_1_SPEED;
+                        break; // Fallback
                 }
                 
                 if (!isRiverLaneSpawnOccupied(gators, *gatorCount, logs, *logCount, testLaneY)) {

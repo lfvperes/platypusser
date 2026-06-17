@@ -1,6 +1,6 @@
 #include "raylib.h"
 #include "game.h"
-#include "object.h"
+#include "character.h"
 #include <stdlib.h>
 
 int main() {
@@ -11,10 +11,10 @@ int main() {
     int gatorCount = 0;
     int logCount = 0;
     
-    object* cars = NULL;
-    object* gators = NULL;
-    object* logs = NULL;
-    object player;
+    character* cars = NULL;
+    character* gators = NULL;
+    character* logs = NULL;
+    character player;
     initGame(&player);
 
     // Game loop

@@ -13,7 +13,7 @@ float hopTimer = 0.0f;
 int carCount = 0;
 int gatorCount = 0;
 
-void initGame(object* player) {
+void initGame(character* player) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
     player->velocity = (Vector2){0, 0};
     player->width = PLAYER_SIZE;
@@ -21,7 +21,7 @@ void initGame(object* player) {
     player->color = GREEN;
 }
 
-void handlePlayerMovement(object* player) {
+void handlePlayerMovement(character* player) {
     hopTimer -= GetFrameTime();
     if (hopTimer <= 0.0f) {
         if (IsKeyDown(KEY_RIGHT)) {
@@ -55,7 +55,7 @@ void handlePlayerMovement(object* player) {
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
 }
 
-int isSpawnZoneOccupied(object* npcs, int npcCount, int laneY) {
+int isSpawnZoneOccupied(character* npcs, int npcCount, int laneY) {
     for (int i = 0; i < npcCount; i++) {
         if (npcs[i].position.y == laneY && npcs[i].position.x < CAR_LENGTH * 2) {
             return 1;
@@ -64,7 +64,7 @@ int isSpawnZoneOccupied(object* npcs, int npcCount, int laneY) {
     return 0;
 }
 
-object* spawnNPC(object* npcs, int* npcCount, int npcChance, char npcType) {
+character* spawnNPC(character* npcs, int* npcCount, int npcChance, char npcType) {
     if (*npcCount < 10 && GetRandomValue(0, 100) < npcChance) {
         int lane;
         Color spawnColor;
@@ -134,7 +134,7 @@ object* spawnNPC(object* npcs, int* npcCount, int npcChance, char npcType) {
         }
 
         // Spawn the npc on the free lane
-        npcs = realloc(npcs, (*npcCount + 1) * sizeof(object));
+        npcs = realloc(npcs, (*npcCount + 1) * sizeof(character));
         npcs[*npcCount].position = (Vector2){0, laneY};
         npcs[*npcCount].velocity = (Vector2){CAR_SPEED, 0};
         npcs[*npcCount].width = CAR_LENGTH;
@@ -145,7 +145,7 @@ object* spawnNPC(object* npcs, int* npcCount, int npcChance, char npcType) {
     return npcs;
 }
 
-void resetGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount) {
+void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
     // Reset player
     initGame(player);
 
@@ -163,7 +163,7 @@ void resetGame(object* player, object** cars, int* carCount, object** gators, in
     screenText = "";
 }
 
-void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount) {
+void updateGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
     if (!isGameOver) {
         screenText = "";
         handlePlayerMovement(player);
@@ -179,7 +179,7 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
                 (*carCount)--;
                 i--; // Adjust index since we removed an element
                 if (*carCount > 0) {
-                    *cars = realloc(*cars, *carCount * sizeof(object));
+                    *cars = realloc(*cars, *carCount * sizeof(character));
                 } else {
                     free(*cars);
                     *cars = NULL;
@@ -198,7 +198,7 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
                 (*gatorCount)--;
                 i--; // Adjust index since we removed an element
                 if (*gatorCount > 0) {
-                    *gators = realloc(*gators, *gatorCount * sizeof(object));
+                    *gators = realloc(*gators, *gatorCount * sizeof(character));
                 } else {
                     free(*gators);
                     *gators = NULL;
@@ -217,7 +217,7 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
                 (*logCount)--;
                 i--; // Adjust index since we removed an element
                 if (*logCount > 0) {
-                    *logs = realloc(*logs, *logCount * sizeof(object));
+                    *logs = realloc(*logs, *logCount * sizeof(character));
                 } else {
                     free(*logs);
                     *logs = NULL;
@@ -264,7 +264,7 @@ void updateGame(object* player, object** cars, int* carCount, object** gators, i
     }
 }
 
-void drawGame(object player, object* cars, int carCount, object* gators, int gatorCount, object* logs, int logCount) {
+void drawGame(character player, character* cars, int carCount, character* gators, int gatorCount, character* logs, int logCount) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     DrawText(screenText, 10, 10, 20, DARKGRAY);

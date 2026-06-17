@@ -1,5 +1,5 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef CHARACTER_H
+#define CHARACTER_H
 
 #include "raylib.h"
 
@@ -9,8 +9,8 @@ typedef struct {
     int width;
     int height;
     Color color;
-} object;
+} character;
 
-int collision(object a, object b);
+int collision(character a, character b);
 
 #endif

@@ -2,7 +2,7 @@
 #define GAME_H
 
 #include "raylib.h"
-#include "object.h"
+#include "character.h"
 
 // Constants
 #define DELAY 0.2
@@ -38,11 +38,11 @@ extern int carCount;
 extern int gatorCount;
 
 // Function prototypes
-void initGame(object* player);
-void updateGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount);
-void drawGame(object player, object* cars, int carCount, object* gators, int gatorCount, object* logs, int logCount);
-void handlePlayerMovement(object* player);
-object* spawnEnemy(object* enemies, int* enemyCount, int enemyChance, char enemyType);
-void resetGame(object* player, object** cars, int* carCount, object** gators, int* gatorCount, object** logs, int* logCount);
+void initGame(character* player);
+void updateGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount);
+void drawGame(character player, character* cars, int carCount, character* gators, int gatorCount, character* logs, int logCount);
+void handlePlayerMovement(character* player);
+character* spawnEnemy(character* enemies, int* enemyCount, int enemyChance, char enemyType);
+void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount);
 
 #endif

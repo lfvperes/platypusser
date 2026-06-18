@@ -2,6 +2,7 @@
 #include "game.h"
 #include "street.h"
 #include "river.h"
+#include "character.h"
 
 int isGameOver = 1; // Start the game in a "game over" state
 char* screenText = "PRESS ENTER TO START";
@@ -9,6 +10,7 @@ float hopTimer = 0.0f;
 int carCount = 0;
 int gatorCount = 0;
 int logCount = 0;
+lane riverLanes[4];
 
 void initGame(character* player) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
@@ -16,6 +18,11 @@ void initGame(character* player) {
     player->width = PLAYER_SIZE;
     player->height = PLAYER_SIZE;
     player->color = GREEN;
+
+    for (int l = 0; l < 4; l++) {
+        int randomSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
+        riverLanes[l] = (lane){randomSpeed, RIVER_LANE_SIZE * l};
+    }
 }
 
 void handlePlayerMovement(character* player) {

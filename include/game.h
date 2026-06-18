@@ -13,12 +13,18 @@
 #define PLAYER_STEP BLOCK_SIZE
 #define CAR_CHANCE 5 // 5% chance to spawn a car each frame
 
+typedef struct {
+    int speed;
+    int yPosition;
+} lane;
+
 // Global variables
 extern int isGameOver;
 extern char* screenText;
 extern float hopTimer;
 extern int carCount;
 extern int gatorCount;
+extern lane riverLanes[4];
 
 // Function prototypes
 void initGame(character* player);

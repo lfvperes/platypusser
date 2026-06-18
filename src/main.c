@@ -15,6 +15,7 @@ int main() {
     character* gators = NULL;
     character* logs = NULL;
     character player;
+    // lane* riverLane = NULL;
     initGame(&player);
 
     // Game loop

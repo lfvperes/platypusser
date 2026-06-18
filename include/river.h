@@ -3,8 +3,6 @@
 
 #include "game.h"
 
-// common
-#define RIVER_MAX_SPEED 2
 // gators
 #define GATOR_HEIGHT BLOCK_SIZE
 #define GATOR_LENGTH BLOCK_SIZE*2
@@ -23,6 +21,8 @@
 #define RIVER_LANE_2_SPEED 2
 #define RIVER_LANE_3_SPEED 1
 #define RIVER_LANE_4_SPEED 2
+#define RIVER_MAX_SPEED 4
+#define RIVER_MIN_SPEED 1
 // river boundaries
 #define RIVER_UPPER_BOUNDARY WINDOW_HEIGHT/2 - RIVER_LANE_SIZE
 #define RIVER_LOWER_BOUNDARY WINDOW_HEIGHT

@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "character.h"
 #include "river.h"
+#include "game.h"
 
 int isRiverLaneSpawnOccupied(character* gators, int gatorCount, character* logs, int logCount, int laneY) {
     for (int i = 0; i < gatorCount; i++) {
@@ -18,39 +19,39 @@ int isRiverLaneSpawnOccupied(character* gators, int gatorCount, character* logs,
 
 character* spawnGator(character* gators, int *gatorCount, character* logs, int *logCount, int gatorChance) {
     if (*gatorCount < 10 && GetRandomValue(0, 100) < gatorChance) {
-        int lane, speed = RIVER_LANE_1_SPEED, length;
+        int currentLane, speed = RIVER_LANE_1_SPEED, length;
         Color spawnColor;
         int minLane, maxLane;
         
         // Determine lane range and color based on npc type
         minLane = 1;
         maxLane = 4;
-        lane = GetRandomValue(minLane, maxLane);
+        currentLane = GetRandomValue(minLane, maxLane);
         spawnColor = DARKGREEN;
         length = GATOR_LENGTH;
 
         // Map lane number to Y position
         int laneY;
-        switch (lane) {
+        switch (currentLane) {
             case 1:
                 laneY = RIVER_LANE_1;
-                speed = RIVER_LANE_1_SPEED;
+                speed = riverLanes[0].speed;
                 break;
-            case 2:
+                case 2:
                 laneY = RIVER_LANE_2;
-                speed = RIVER_LANE_2_SPEED;
+                speed = riverLanes[1].speed;
                 break;
             case 3:
                 laneY = RIVER_LANE_3;
-                speed = RIVER_LANE_3_SPEED;
+                speed = riverLanes[2].speed;
                 break;
             case 4:
                 laneY = RIVER_LANE_4;
-                speed = RIVER_LANE_4_SPEED;
+                speed = riverLanes[3].speed;
                 break;
             default:
                 laneY = RIVER_LANE_1;
-                speed = RIVER_LANE_1_SPEED;
+                speed = riverLanes[0].speed;
                 break; // Fallback
         }
             
@@ -63,23 +64,23 @@ character* spawnGator(character* gators, int *gatorCount, character* logs, int *
                     switch (i) {
                         case 1:
                             testLaneY = RIVER_LANE_1;
-                            speed = RIVER_LANE_1_SPEED;
+                            speed = riverLanes[0].speed;
                             break;
                         case 2:
                             testLaneY = RIVER_LANE_2;
-                            speed = RIVER_LANE_2_SPEED;
+                            speed = riverLanes[1].speed;
                             break;
                         case 3:
                             testLaneY = RIVER_LANE_3;
-                            speed = RIVER_LANE_3_SPEED;
+                            speed = riverLanes[2].speed;
                             break;
                         case 4:
                             testLaneY = RIVER_LANE_4;
-                            speed = RIVER_LANE_4_SPEED;
+                            speed = riverLanes[3].speed;
                             break;
                         default:
                             testLaneY = RIVER_LANE_1;
-                            speed = RIVER_LANE_1_SPEED;
+                            speed = riverLanes[0].speed;
                             break; // Fallback
                     }
                 
@@ -109,39 +110,39 @@ character* spawnGator(character* gators, int *gatorCount, character* logs, int *
 
 character* spawnLog(character* gators, int *gatorCount, character* logs, int *logCount, int logChance) {
     if (*logCount < 10 && GetRandomValue(0, 100) < logChance) {
-        int lane, speed = RIVER_LANE_1_SPEED, length;
+        int currentLane, speed = RIVER_LANE_1_SPEED, length;
         Color spawnColor;
         int minLane, maxLane;
         
         // Determine lane range and color based on npc type
         minLane = 1;
         maxLane = 4;
-        lane = GetRandomValue(minLane, maxLane);
+        currentLane = GetRandomValue(minLane, maxLane);
         spawnColor = MAROON;
         length = GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
         
         // Map lane number to Y position
         int laneY;
-        switch (lane) {
+        switch (currentLane) {
             case 1:
                 laneY = RIVER_LANE_1;
-                speed = RIVER_LANE_1_SPEED;
+                speed = riverLanes[0].speed;
                 break;
             case 2:
                 laneY = RIVER_LANE_2;
-                speed = RIVER_LANE_2_SPEED;
+                speed = riverLanes[1].speed;
                 break;
             case 3:
                 laneY = RIVER_LANE_3;
-                speed = RIVER_LANE_3_SPEED;
+                speed = riverLanes[2].speed;
                 break;
             case 4:
                 laneY = RIVER_LANE_4;
-                speed = RIVER_LANE_4_SPEED;
+                speed = riverLanes[3].speed;
                 break;
             default:
                 laneY = RIVER_LANE_1;
-                speed = RIVER_LANE_1_SPEED;
+                speed = riverLanes[0].speed;
                 break; // Fallback
         }
 
@@ -154,23 +155,23 @@ character* spawnLog(character* gators, int *gatorCount, character* logs, int *lo
                 switch (i) {
                     case 1:
                         testLaneY = RIVER_LANE_1;
-                        speed = RIVER_LANE_1_SPEED;
+                        speed = riverLanes[0].speed;
                         break;
                     case 2:
                         testLaneY = RIVER_LANE_2;
-                        speed = RIVER_LANE_2_SPEED;
+                        speed = riverLanes[1].speed;
                         break;
                     case 3:
                         testLaneY = RIVER_LANE_3;
-                        speed = RIVER_LANE_3_SPEED;
+                        speed = riverLanes[2].speed;
                         break;
                     case 4:
                         testLaneY = RIVER_LANE_4;
-                        speed = RIVER_LANE_4_SPEED;
+                        speed = riverLanes[3].speed;
                         break;
                     default:
                         testLaneY = RIVER_LANE_1;
-                        speed = RIVER_LANE_1_SPEED;
+                        speed = riverLanes[0].speed;
                         break; // Fallback
                 }
                 

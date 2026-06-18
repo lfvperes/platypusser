@@ -10,6 +10,20 @@ int collision(character a, character b) {
            (a.position.y + a.height > b.position.y);
 }
 
+int isLaneOccupied(NpcData* npcData, int laneY) {
+    for (int i = 0; i < *npcData->gatorCount; i++) {
+        if ((*npcData->gators)[i].position.y == laneY && (*npcData->gators)[i].position.x < GATOR_LENGTH*2) {
+            return 1;
+        }
+    }
+    for (int i = 0; i < *npcData->logCount; i++) {
+        if ((*npcData->logs)[i].position.y == laneY && (*npcData->logs)[i].position.x < (*npcData->logs)[i].width*2) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 character* spawnNpc(NpcData* npcData, int npcChance, char npcType) {
     Color spawnColor;
     int* npcCount;
@@ -43,14 +57,14 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType) {
         speed = riverLanes[currentLane - 1].speed;
 
         // Check if the spawn zone of the lane is occupied
-        if (isRiverLaneSpawnOccupied(*npcData->gators, *npcData->gatorCount, *npcData->logs, *npcData->logCount, laneY)) {
+        if (isLaneOccupied(npcData, laneY)) {
             // Try to find another free lane
             int foundFreeLane = 0;
             for (int i = minLane; i <= maxLane; i++) {
                 int testLaneY = riverLanes[i - 1].yPosition;
                 speed = riverLanes[i - 1].speed;
 
-                if (!isRiverLaneSpawnOccupied(*npcData->gators, *npcData->gatorCount, *npcData->logs, *npcData->logCount, testLaneY)) {
+                if (!isLaneOccupied(npcData, testLaneY)) {
                     laneY = testLaneY;
                     foundFreeLane = 1;
                     break;

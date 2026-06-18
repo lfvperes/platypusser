@@ -2,6 +2,9 @@
 #define CHARACTER_H
 
 #include "raylib.h"
+#include "lane.h"
+
+#define MAX_COLORS_COUNT 21
 
 typedef struct {
     Vector2 position;
@@ -16,9 +19,12 @@ typedef struct {
     int* gatorCount;
     character** logs;
     int* logCount;
+    character** cars;
+    int* carCount;
 } NpcData;
 
 int collision(character a, character b);
-character* spawnNpc(NpcData* npcData, int npcChance, char npcType);
+character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes);
+void updateNPCPosition(character** npcs, int* npcCount);
 
 #endif

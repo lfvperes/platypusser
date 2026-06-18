@@ -11,6 +11,7 @@ int carCount = 0;
 int gatorCount = 0;
 int logCount = 0;
 lane riverLanes[4];
+lane streetLanes[4];
 
 void initGame(character* player) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
@@ -20,9 +21,13 @@ void initGame(character* player) {
     player->color = GREEN;
 
     for (int l = 0; l < 4; l++) {
-        int randomSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
-        int lanePos = RIVER_LANE_SIZE * (2*l+1);
-        riverLanes[l] = (lane){randomSpeed, lanePos};
+        int riverLaneSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
+        int riverLanePos = LANE_SIZE * (2*l+1);
+        riverLanes[l] = (lane){riverLaneSpeed, riverLanePos};
+
+        int streetLaneSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
+        int streetLanePos = LANE_SIZE * (10+2*l);
+        streetLanes[l] = (lane){streetLaneSpeed, streetLanePos};
     }
 }
 
@@ -58,27 +63,6 @@ void handlePlayerMovement(character* player) {
     if (player->position.y < 0) player->position.y = 0;
     if (player->position.x > WINDOW_WIDTH - player->width) player->position.x = WINDOW_WIDTH - player->width;
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
-}
-
-void updateNPCPosition(character** npcs, int* npcCount) {
-    // Update npc positions and remove out-of-bounds
-    for (int i = 0; i < *npcCount; i++) {
-        (*npcs)[i].position.x += (*npcs)[i].velocity.x;
-        if ((*npcs)[i].position.x > WINDOW_WIDTH) {
-            // Remove npc by shifting remaining npcs and reallocating
-            for (int j = i; j < *npcCount - 1; j++) {
-                (*npcs)[j] = (*npcs)[j + 1];
-            }
-            (*npcCount)--;
-            i--; // Adjust index since we removed an element
-            if (*npcCount > 0) {
-                *npcs = realloc(*npcs, *npcCount * sizeof(character));
-            } else {
-                free(*npcs);
-                *npcs = NULL;
-            }
-        }
-    }
 }
 
 void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
@@ -127,10 +111,10 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         }
 
         // Spawn new enemies
-        *cars = spawnCar(*cars, carCount, CAR_CHANCE);
-        NpcData npcData = {gators, gatorCount, logs, logCount};  // No dereferencing needed
-        *gators = spawnNpc(&npcData, CAR_CHANCE, 'G');
-        *logs = spawnNpc(&npcData, CAR_CHANCE, 'L');
+        NpcData npcData = {gators, gatorCount, logs, logCount, cars, carCount};  // No dereferencing needed
+        *cars = spawnNpc(&npcData, CAR_CHANCE, 'C', streetLanes);
+        *gators = spawnNpc(&npcData, CAR_CHANCE, 'G', riverLanes);
+        *logs = spawnNpc(&npcData, CAR_CHANCE, 'L', riverLanes);
     } else {
         // Stop cars when game is over
         for (int i = 0; i < *carCount; i++) {

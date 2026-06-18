@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "character.h"
+#include "lane.h"
 
 // Constants
 #define DELAY 0.2
@@ -13,11 +14,6 @@
 #define PLAYER_STEP BLOCK_SIZE
 #define CAR_CHANCE 5 // 5% chance to spawn a car each frame
 
-typedef struct {
-    int speed;
-    int yPosition;
-} lane;
-
 // Global variables
 extern int isGameOver;
 extern char* screenText;
@@ -25,7 +21,6 @@ extern float hopTimer;
 extern int carCount;
 extern int gatorCount;
 extern int logCount;
-extern lane riverLanes[4];
 
 // Function prototypes
 void initGame(character* player);
@@ -34,6 +29,5 @@ void drawGame(character player, character* cars, int carCount, character* gators
 void handlePlayerMovement(character* player);
 character* spawnEnemy(character* enemies, int* enemyCount, int enemyChance, char enemyType);
 void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount);
-void updateNPCPosition(character** npcs, int* npcCount);
 
 #endif

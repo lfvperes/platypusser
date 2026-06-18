@@ -89,9 +89,9 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         handlePlayerMovement(player);
 
         // Update positions and remove out-of-bounds
-        updateNPCPosition(cars, carCount);
-        updateNPCPosition(gators, gatorCount);
-        updateNPCPosition(logs, logCount);
+        updateNpcPosition(cars, carCount);
+        updateNpcPosition(gators, gatorCount);
+        updateNpcPosition(logs, logCount);
 
         // Check for collisions with cars
         for (int i = 0; i < *carCount; i++) {

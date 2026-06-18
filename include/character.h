@@ -25,6 +25,6 @@ typedef struct NpcData {
 
 int collision(character a, character b);
 character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes);
-void updateNPCPosition(character** npcs, int* npcCount);
+void updateNpcPosition(character** npcs, int* npcCount);
 
 #endif

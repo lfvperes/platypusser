@@ -84,7 +84,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
     return *npcs;
 }
 
-void updateNPCPosition(character** npcs, int* npcCount) {
+void updateNpcPosition(character** npcs, int* npcCount) {
     // Update npc positions and remove out-of-bounds
     for (int i = 0; i < *npcCount; i++) {
         (*npcs)[i].position.x += (*npcs)[i].velocity.x;

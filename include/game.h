@@ -24,6 +24,7 @@ extern char* screenText;
 extern float hopTimer;
 extern int carCount;
 extern int gatorCount;
+extern int logCount;
 extern lane riverLanes[4];
 
 // Function prototypes

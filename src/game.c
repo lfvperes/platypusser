@@ -21,7 +21,8 @@ void initGame(character* player) {
 
     for (int l = 0; l < 4; l++) {
         int randomSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
-        riverLanes[l] = (lane){randomSpeed, RIVER_LANE_SIZE * l};
+        int lanePos = RIVER_LANE_SIZE * (2*l+1);
+        riverLanes[l] = (lane){randomSpeed, lanePos};
     }
 }
 
@@ -116,7 +117,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
                 break;
             }
         }
-        // check for collisions with gators
+        // Check for collisions with gators
         for (int i = 0; i < *gatorCount; i++) {
             if (collision(*player, (*gators)[i])) {
                 isGameOver = 1;
@@ -127,8 +128,9 @@ void updateGame(character* player, character** cars, int* carCount, character** 
 
         // Spawn new enemies
         *cars = spawnCar(*cars, carCount, CAR_CHANCE);
-        *gators = spawnGator(*gators, gatorCount, *logs, logCount, CAR_CHANCE);
-        *logs = spawnLog(*gators, gatorCount, *logs, logCount, CAR_CHANCE);
+        NpcData npcData = {gators, gatorCount, logs, logCount};  // No dereferencing needed
+        *gators = spawnNpc(&npcData, CAR_CHANCE, 'G');
+        *logs = spawnNpc(&npcData, CAR_CHANCE, 'L');
     } else {
         // Stop cars when game is over
         for (int i = 0; i < *carCount; i++) {

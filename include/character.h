@@ -11,6 +11,14 @@ typedef struct {
     Color color;
 } character;
 
+typedef struct {
+    character** gators;
+    int* gatorCount;
+    character** logs;
+    int* logCount;
+} NpcData;
+
 int collision(character a, character b);
+character* spawnNpc(NpcData* npcData, int npcChance, char npcType);
 
 #endif

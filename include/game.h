@@ -33,5 +33,6 @@ void drawGame(character player, character* cars, int carCount, character* gators
 void handlePlayerMovement(character* player);
 character* spawnEnemy(character* enemies, int* enemyCount, int enemyChance, char enemyType);
 void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount);
+void updateNPCPosition(character** npcs, int* npcCount);
 
 #endif

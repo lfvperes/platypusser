@@ -59,6 +59,27 @@ void handlePlayerMovement(character* player) {
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
 }
 
+void updateNPCPosition(character** npcs, int* npcCount) {
+    // Update npc positions and remove out-of-bounds
+    for (int i = 0; i < *npcCount; i++) {
+        (*npcs)[i].position.x += (*npcs)[i].velocity.x;
+        if ((*npcs)[i].position.x > WINDOW_WIDTH) {
+            // Remove npc by shifting remaining npcs and reallocating
+            for (int j = i; j < *npcCount - 1; j++) {
+                (*npcs)[j] = (*npcs)[j + 1];
+            }
+            (*npcCount)--;
+            i--; // Adjust index since we removed an element
+            if (*npcCount > 0) {
+                *npcs = realloc(*npcs, *npcCount * sizeof(character));
+            } else {
+                free(*npcs);
+                *npcs = NULL;
+            }
+        }
+    }
+}
+
 void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
     // Reset player
     initGame(player);
@@ -83,9 +104,9 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         handlePlayerMovement(player);
 
         // Update positions and remove out-of-bounds
-        updateCarPosition(cars, carCount);
-        updateGatorPosition(gators, gatorCount);
-        updateLogPosition(logs, logCount);
+        updateNPCPosition(cars, carCount);
+        updateNPCPosition(gators, gatorCount);
+        updateNPCPosition(logs, logCount);
 
         // Check for collisions with cars
         for (int i = 0; i < *carCount; i++) {

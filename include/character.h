@@ -14,7 +14,7 @@ typedef struct {
     Color color;
 } character;
 
-typedef struct {
+typedef struct NpcData {
     character** gators;
     int* gatorCount;
     character** logs;

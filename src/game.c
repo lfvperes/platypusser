@@ -12,6 +12,7 @@ int gatorCount = 0;
 int logCount = 0;
 lane riverLanes[4];
 lane streetLanes[4];
+int isPlayerOnLog = 0;
 
 void initGame(character* player) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
@@ -41,7 +42,8 @@ void handlePlayerMovement(character* player) {
             player->velocity.x = -PLAYER_STEP;
             player->velocity.y = 0;
         } else {
-            player->velocity.x = 0;
+            if (!isPlayerOnLog)
+                player->velocity.x = 0;
         }
         if (IsKeyDown(KEY_DOWN)) {
             player->velocity.y = PLAYER_STEP;
@@ -56,6 +58,8 @@ void handlePlayerMovement(character* player) {
         player->position.x += player->velocity.x;
         player->position.y += player->velocity.y;
         hopTimer = DELAY;
+    } else if (isPlayerOnLog) {
+        player->position.x += player->velocity.x;
     }
 
     // Check wall collision
@@ -97,7 +101,6 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         for (int i = 0; i < *carCount; i++) {
             if (collision(*player, (*cars)[i])) {
                 isGameOver = 1;
-                screenText = "GAME OVER - PRESS ENTER TO RESTART";
                 break;
             }
         }
@@ -105,8 +108,29 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         for (int i = 0; i < *gatorCount; i++) {
             if (collision(*player, (*gators)[i])) {
                 isGameOver = 1;
-                screenText = "GAME OVER - PRESS ENTER TO RESTART";
                 break;
+            }
+        }
+
+        // check for collisions with logs
+        isPlayerOnLog = 0;
+        for (int i = 0; i < *logCount; i++) {
+            if (collision(*player, (*logs)[i])) {
+                isPlayerOnLog = 1;
+                // gets carried by the floating log
+                player->velocity.x = (*logs)[i].velocity.x;
+                break;
+            }
+        }
+        // check if it's on the river
+        if (player->position.y < RIVER_LOWER_BOUNDARY) {
+            // check if it's in a river lane
+            if (player->position.y == riverLanes[0].yPosition ||
+                player->position.y == riverLanes[1].yPosition ||
+                player->position.y == riverLanes[2].yPosition ||
+                player->position.y == riverLanes[3].yPosition) {
+                if (!isPlayerOnLog)
+                    isGameOver = 1;
             }
         }
 
@@ -116,6 +140,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         *gators = spawnNpc(&npcData, CAR_CHANCE, 'G', riverLanes);
         *logs = spawnNpc(&npcData, CAR_CHANCE, 'L', riverLanes);
     } else {
+        screenText = "GAME OVER - PRESS ENTER TO RESTART";
         // Stop cars when game is over
         for (int i = 0; i < *carCount; i++) {
             (*cars)[i].velocity.x = 0;
@@ -147,9 +172,6 @@ void drawGame(character player, character* cars, int carCount, character* gators
     // Draw street
     DrawRectangle(0, STREET_UPPER_BOUNDARY, WINDOW_WIDTH, STREET_LOWER_BOUNDARY - STREET_UPPER_BOUNDARY, DARKGRAY);
     
-    // Draw player
-    DrawRectangleV(player.position, (Vector2){player.width, player.height}, player.color);
-
     // Draw cars
     for (int i = 0; i < carCount; i++) {
         DrawRectangleV(cars[i].position, (Vector2){cars[i].width, cars[i].height}, cars[i].color);
@@ -162,5 +184,7 @@ void drawGame(character player, character* cars, int carCount, character* gators
     for (int i = 0; i < logCount; i++) {
         DrawRectangleV(logs[i].position, (Vector2){logs[i].width, logs[i].height}, logs[i].color);
     }
+    // Draw player
+    DrawRectangleV(player.position, (Vector2){player.width, player.height}, player.color);
     EndDrawing();
 }

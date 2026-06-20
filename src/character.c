@@ -29,7 +29,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             npcs = npcData->gators;
             break;
         case 'L':
-            spawnColor = MAROON;
+            spawnColor = BROWN;
             npcCount = npcData->logCount;    // No dereferencing needed
             npcs = npcData->logs;
             break;

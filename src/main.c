@@ -15,8 +15,10 @@ int main() {
     character* gators = NULL;
     character* logs = NULL;
     character player;
+
+    NpcData npcData;
     // lane* riverLane = NULL;
-    initGame(&player);
+    initGame(&player, &npcData);
 
     // Game loop
     while (!WindowShouldClose()) {

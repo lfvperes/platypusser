@@ -13,8 +13,9 @@ int logCount = 0;
 lane riverLanes[4];
 lane streetLanes[4];
 int isPlayerOnLog = 0;
+NpcData npcData;
 
-void initGame(character* player) {
+void initGame(character* player, NpcData* npcData) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
     player->velocity = (Vector2){0, 0};
     player->width = PLAYER_SIZE;
@@ -30,6 +31,14 @@ void initGame(character* player) {
         int streetLanePos = LANE_SIZE * (10+2*l);
         streetLanes[l] = (lane){streetLaneSpeed, streetLanePos};
     }
+
+    // Initialize NpcData
+    npcData->gators = NULL;
+    npcData->gatorCount = 0;
+    npcData->logs = NULL;
+    npcData->logCount = 0;
+    npcData->cars = NULL;
+    npcData->carCount = 0;
 }
 
 void handlePlayerMovement(character* player) {
@@ -69,18 +78,12 @@ void handlePlayerMovement(character* player) {
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
 }
 
-void resetGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
+void resetGame(character* player, NpcData* npcData) {
     // Reset player
-    initGame(player);
+    initGame(player, npcData);
 
     // Free and reinitialize cars
-    free(*cars);
-    *cars = NULL;
-    *carCount = 0;
-    *gators = NULL;
-    *gatorCount = 0;
-    *logs = NULL;
-    *logCount = 0;
+    // free(*cars);
 
     // Reset game state
     isGameOver = 0;
@@ -134,7 +137,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
             }
         }
 
-        // Spawn new enemies
+        // Spawn new NPCs
         NpcData npcData = {gators, gatorCount, logs, logCount, cars, carCount};  // No dereferencing needed
         *cars = spawnNpc(&npcData, CAR_CHANCE, 'C', streetLanes);
         *gators = spawnNpc(&npcData, CAR_CHANCE, 'G', riverLanes);
@@ -156,7 +159,7 @@ void updateGame(character* player, character** cars, int* carCount, character** 
 
         // Start or restart the game when ENTER is pressed
         if (IsKeyPressed(KEY_ENTER)) {
-            resetGame(player, cars, carCount, gators, gatorCount, logs, logCount);
+            resetGame(player, &npcData);
         }
     }
 }

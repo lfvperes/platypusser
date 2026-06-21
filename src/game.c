@@ -7,13 +7,9 @@
 int isGameOver = 1; // Start the game in a "game over" state
 char* screenText = "PRESS ENTER TO START";
 float hopTimer = 0.0f;
-int carCount = 0;
-int gatorCount = 0;
-int logCount = 0;
 lane riverLanes[4];
 lane streetLanes[4];
 int isPlayerOnLog = 0;
-NpcData npcData;
 
 void initGame(character* player, NpcData* npcData) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
@@ -33,12 +29,12 @@ void initGame(character* player, NpcData* npcData) {
     }
 
     // Initialize NpcData
-    npcData->gators = NULL;
-    npcData->gatorCount = 0;
-    npcData->logs = NULL;
-    npcData->logCount = 0;
-    npcData->cars = NULL;
-    npcData->carCount = 0;
+    *npcData->gators = NULL;
+    *npcData->gatorCount = 0;
+    *npcData->logs = NULL;
+    *npcData->logCount = 0;
+    *npcData->cars = NULL;
+    *npcData->carCount = 0;
 }
 
 void handlePlayerMovement(character* player) {
@@ -79,37 +75,38 @@ void handlePlayerMovement(character* player) {
 }
 
 void resetGame(character* player, NpcData* npcData) {
+    free(*npcData->cars);
+    free(*npcData->gators);
+    free(*npcData->logs);
+
     // Reset player
     initGame(player, npcData);
-
-    // Free and reinitialize cars
-    // free(*cars);
 
     // Reset game state
     isGameOver = 0;
     screenText = "";
 }
 
-void updateGame(character* player, character** cars, int* carCount, character** gators, int* gatorCount, character** logs, int* logCount) {
+void updateGame(character* player, NpcData* npcData) {
     if (!isGameOver) {
         screenText = "";
         handlePlayerMovement(player);
 
         // Update positions and remove out-of-bounds
-        updateNpcPosition(cars, carCount);
-        updateNpcPosition(gators, gatorCount);
-        updateNpcPosition(logs, logCount);
+        updateNpcPosition(npcData->cars, npcData->carCount);
+        updateNpcPosition(npcData->gators, npcData->gatorCount);
+        updateNpcPosition(npcData->logs, npcData->logCount);
 
         // Check for collisions with cars
-        for (int i = 0; i < *carCount; i++) {
-            if (collision(*player, (*cars)[i])) {
+        for (int i = 0; i < *npcData->carCount; i++) {
+            if (collision(*player, (*npcData->cars)[i])) {
                 isGameOver = 1;
                 break;
             }
         }
         // Check for collisions with gators
-        for (int i = 0; i < *gatorCount; i++) {
-            if (collision(*player, (*gators)[i])) {
+        for (int i = 0; i < *npcData->gatorCount; i++) {
+            if (collision(*player, (*npcData->gators)[i])) {
                 isGameOver = 1;
                 break;
             }
@@ -117,11 +114,11 @@ void updateGame(character* player, character** cars, int* carCount, character** 
 
         // check for collisions with logs
         isPlayerOnLog = 0;
-        for (int i = 0; i < *logCount; i++) {
-            if (collision(*player, (*logs)[i])) {
+        for (int i = 0; i < *npcData->logCount; i++) {
+            if (collision(*player, (*npcData->logs)[i])) {
                 isPlayerOnLog = 1;
                 // gets carried by the floating log
-                player->velocity.x = (*logs)[i].velocity.x;
+                player->velocity.x = (*npcData->logs)[i].velocity.x;
                 break;
             }
         }
@@ -138,28 +135,27 @@ void updateGame(character* player, character** cars, int* carCount, character** 
         }
 
         // Spawn new NPCs
-        NpcData npcData = {gators, gatorCount, logs, logCount, cars, carCount};  // No dereferencing needed
-        *cars = spawnNpc(&npcData, CAR_CHANCE, 'C', streetLanes);
-        *gators = spawnNpc(&npcData, CAR_CHANCE, 'G', riverLanes);
-        *logs = spawnNpc(&npcData, CAR_CHANCE, 'L', riverLanes);
+        *npcData->cars = spawnNpc(npcData, CAR_CHANCE, 'C', streetLanes);
+        *npcData->gators = spawnNpc(npcData, CAR_CHANCE, 'G', riverLanes);
+        *npcData->logs = spawnNpc(npcData, CAR_CHANCE, 'L', riverLanes);
     } else {
         screenText = "GAME OVER - PRESS ENTER TO RESTART";
         // Stop cars when game is over
-        for (int i = 0; i < *carCount; i++) {
-            (*cars)[i].velocity.x = 0;
+        for (int i = 0; i < *npcData->carCount; i++) {
+            (*npcData->cars)[i].velocity.x = 0;
         }
         // Stop gators when game is over
-        for (int i = 0; i < *gatorCount; i++) {
-            (*gators)[i].velocity.x = 0;
+        for (int i = 0; i < *npcData->gatorCount; i++) {
+            (*npcData->gators)[i].velocity.x = 0;
         }
         // Stop logs when game is over
-        for (int i = 0; i < *logCount; i++) {
-            (*logs)[i].velocity.x = 0;
+        for (int i = 0; i < *npcData->logCount; i++) {
+            (*npcData->logs)[i].velocity.x = 0;
         }
 
         // Start or restart the game when ENTER is pressed
         if (IsKeyPressed(KEY_ENTER)) {
-            resetGame(player, &npcData);
+            resetGame(player, npcData);
         }
     }
 }

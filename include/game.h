@@ -13,6 +13,8 @@
 #define PLAYER_SIZE BLOCK_SIZE
 #define PLAYER_STEP BLOCK_SIZE
 #define CAR_CHANCE 5 // 5% chance to spawn a car each frame
+#define GATOR_CHANCE 1
+#define LOG_CHANCE 10
 
 // Global variables
 extern int isGameOver;

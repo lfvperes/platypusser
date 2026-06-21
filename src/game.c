@@ -136,8 +136,8 @@ void updateGame(character* player, NpcData* npcData) {
 
         // Spawn new NPCs
         *npcData->cars = spawnNpc(npcData, CAR_CHANCE, 'C', streetLanes);
-        *npcData->gators = spawnNpc(npcData, CAR_CHANCE, 'G', riverLanes);
-        *npcData->logs = spawnNpc(npcData, CAR_CHANCE, 'L', riverLanes);
+        *npcData->gators = spawnNpc(npcData, GATOR_CHANCE, 'G', riverLanes);
+        *npcData->logs = spawnNpc(npcData, LOG_CHANCE, 'L', riverLanes);
     } else {
         screenText = "GAME OVER - PRESS ENTER TO RESTART";
         // Stop cars when game is over

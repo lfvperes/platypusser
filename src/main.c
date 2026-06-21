@@ -7,7 +7,7 @@ int main() {
     // Initialization
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Platypus Game");
     SetTargetFPS(60);
-    
+
     character player;
     NpcData npcData;
     
@@ -25,6 +25,7 @@ int main() {
     npcData.logs = &logs;
     int logCount = 0;
     npcData.logCount = &logCount;
+    
     // lane* riverLane = NULL;
     initGame(&player, &npcData);
 

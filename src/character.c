@@ -2,6 +2,7 @@
 #include "character.h"
 #include "game.h"
 #include "river.h"
+#include "street.h"
 
 Color colors[MAX_COLORS_COUNT] = {
     DARKGRAY, MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, DARKBROWN,
@@ -75,7 +76,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
         // Spawn the NPC on the free lane
         *npcs = realloc(*npcs, (*npcCount + 1) * sizeof(character));
         (*npcs)[*npcCount].velocity = (Vector2){speed, 0};
-        (*npcs)[*npcCount].width = (npcType == 'G') ? GATOR_LENGTH : GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
+        (*npcs)[*npcCount].width = (npcType == 'G') ? GATOR_LENGTH : (npcType == 'C') ? CAR_LENGTH : GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
         (*npcs)[*npcCount].height = (npcType == 'G') ? GATOR_HEIGHT : LOG_HEIGHT;
         (*npcs)[*npcCount].position = (Vector2){-(*npcs)[*npcCount].width, laneY};
         (*npcs)[*npcCount].color = spawnColor;

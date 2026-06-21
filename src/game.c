@@ -7,8 +7,8 @@
 int isGameOver = 1; // Start the game in a "game over" state
 char* screenText = "PRESS ENTER TO START";
 float hopTimer = 0.0f;
-lane riverLanes[4];
-lane streetLanes[4];
+lane riverLanes[RIVER_LANE_COUNT];
+lane streetLanes[STREET_LANE_COUNT];
 int isPlayerOnLog = 0;
 
 void initGame(character* player, NpcData* npcData) {
@@ -18,13 +18,14 @@ void initGame(character* player, NpcData* npcData) {
     player->height = PLAYER_SIZE;
     player->color = GREEN;
 
-    for (int l = 0; l < 4; l++) {
+    for (int l = 0; l < RIVER_LANE_COUNT; l++) {
         int riverLaneSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
-        int riverLanePos = LANE_SIZE * (2*l+1);
+        int riverLanePos = RIVER_UPPER_BOUNDARY + LANE_SIZE * l;
         riverLanes[l] = (lane){riverLaneSpeed, riverLanePos};
-
-        int streetLaneSpeed = GetRandomValue(RIVER_MIN_SPEED, RIVER_MAX_SPEED);
-        int streetLanePos = LANE_SIZE * (10+2*l);
+    }
+    for (int l = 0; l < STREET_LANE_COUNT; l++) {
+        int streetLaneSpeed = GetRandomValue(STREET_MIN_SPEED, STREET_MAX_SPEED);
+        int streetLanePos = STREET_UPPER_BOUNDARY + LANE_SIZE * l;
         streetLanes[l] = (lane){streetLaneSpeed, streetLanePos};
     }
 

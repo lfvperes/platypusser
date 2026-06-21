@@ -22,6 +22,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
     int* npcCount;
     int width, height;
     character** npcs;
+    int minLane = 1, maxLane;
 
     // Determine NPC type and set appropriate variables
     switch (npcType) {
@@ -31,6 +32,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             npcs = npcData->gators;
             width = GATOR_LENGTH;
             height = GATOR_HEIGHT;
+            maxLane = RIVER_LANE_COUNT;
             break;
         case 'L':
             spawnColor = BROWN;
@@ -38,6 +40,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             npcs = npcData->logs;
             width = GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
             height = LOG_HEIGHT;
+            maxLane = RIVER_LANE_COUNT;
             break;
         case 'C':
             spawnColor = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
@@ -45,6 +48,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             npcs = npcData->cars;
             width = CAR_LENGTH;
             height = CAR_HEIGHT;
+            maxLane = STREET_LANE_COUNT;
             break;
         default:
             return *npcs; // Invalid NPC type, return unchanged
@@ -52,7 +56,6 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
 
     if (*npcCount < 10 && GetRandomValue(0, 100) < npcChance) {
         int currentLane, speed, length;
-        int minLane = 1, maxLane = 4;
 
         currentLane = GetRandomValue(minLane, maxLane);
         

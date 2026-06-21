@@ -12,7 +12,7 @@
 #define BLOCK_SIZE 30
 #define PLAYER_SIZE BLOCK_SIZE
 #define PLAYER_STEP BLOCK_SIZE
-#define CAR_CHANCE 5 // 5% chance to spawn a car each frame
+#define CAR_CHANCE 5
 #define GATOR_CHANCE 1
 #define LOG_CHANCE 10
 
@@ -20,9 +20,6 @@
 extern int isGameOver;
 extern char* screenText;
 extern float hopTimer;
-extern int carCount;
-extern int gatorCount;
-extern int logCount;
 
 // Function prototypes
 void initGame(character* player, NpcData* npcData);

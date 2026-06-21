@@ -24,13 +24,7 @@
 #define RIVER_MAX_SPEED 4
 #define RIVER_MIN_SPEED 1
 // river boundaries
-#define RIVER_UPPER_BOUNDARY RIVER_LANE_SIZE
-#define RIVER_LOWER_BOUNDARY WINDOW_HEIGHT/2 - RIVER_LANE_SIZE
-
-character* spawnGator(character* gators, int *gatorCount, character* logs, int *logCount, int logChance);
-character* spawnLog(character* gators, int *gatorCount, character* logs, int *logCount, int logChance);
-void updateGatorPosition(character** gators, int* gatorCount);
-void updateLogPosition(character** logs, int* logCount);
-int isRiverLaneSpawnOccupied(character* gators, int gatorCount, character* logs, int logCount, int laneY);
+#define RIVER_UPPER_BOUNDARY 2*LANE_SIZE
+#define RIVER_LOWER_BOUNDARY WINDOW_HEIGHT/2 - 3*LANE_SIZE
 
 #endif

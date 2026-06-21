@@ -15,12 +15,10 @@
 #define LANE_2 LANE_SIZE * 12
 #define LANE_3 LANE_SIZE * 14
 #define LANE_4 LANE_SIZE * 16
+#define STREET_MAX_SPEED 4
+#define STREET_MIN_SPEED 1
 // street boundaries
-#define STREET_UPPER_BOUNDARY WINDOW_HEIGHT/2 - LANE_SIZE
-#define STREET_LOWER_BOUNDARY WINDOW_HEIGHT
-
-int isStreetLaneSpawnOccupied(character* cars, int carCount, int laneY);
-character* spawnCar(character* cars, int* carCount, int carChance);
-void updateCarPosition(character** cars, int* carCount);
+#define STREET_UPPER_BOUNDARY WINDOW_HEIGHT/2 
+#define STREET_LOWER_BOUNDARY WINDOW_HEIGHT - 5 *LANE_SIZE
 
 #endif

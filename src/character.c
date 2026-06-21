@@ -20,6 +20,7 @@ int collision(character a, character b) {
 character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) {
     Color spawnColor;
     int* npcCount;
+    int width, height;
     character** npcs;
 
     // Determine NPC type and set appropriate variables
@@ -28,16 +29,22 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             spawnColor = DARKGREEN;
             npcCount = npcData->gatorCount;  // No dereferencing needed
             npcs = npcData->gators;
+            width = GATOR_LENGTH;
+            height = GATOR_HEIGHT;
             break;
         case 'L':
             spawnColor = BROWN;
             npcCount = npcData->logCount;    // No dereferencing needed
             npcs = npcData->logs;
+            width = GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
+            height = LOG_HEIGHT;
             break;
         case 'C':
             spawnColor = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
             npcCount = npcData->carCount;
             npcs = npcData->cars;
+            width = CAR_LENGTH;
+            height = CAR_HEIGHT;
             break;
         default:
             return *npcs; // Invalid NPC type, return unchanged
@@ -76,8 +83,8 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
         // Spawn the NPC on the free lane
         *npcs = realloc(*npcs, (*npcCount + 1) * sizeof(character));
         (*npcs)[*npcCount].velocity = (Vector2){speed, 0};
-        (*npcs)[*npcCount].width = (npcType == 'G') ? GATOR_LENGTH : (npcType == 'C') ? CAR_LENGTH : GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
-        (*npcs)[*npcCount].height = (npcType == 'G') ? GATOR_HEIGHT : LOG_HEIGHT;
+        (*npcs)[*npcCount].width = width;
+        (*npcs)[*npcCount].height = height;
         (*npcs)[*npcCount].position = (Vector2){-(*npcs)[*npcCount].width, laneY};
         (*npcs)[*npcCount].color = spawnColor;
         (*npcCount)++;

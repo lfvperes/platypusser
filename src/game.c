@@ -124,15 +124,9 @@ void updateGame(character* player, NpcData* npcData) {
             }
         }
         // check if it's on the river
-        if (player->position.y < RIVER_LOWER_BOUNDARY) {
-            // check if it's in a river lane
-            if (player->position.y == riverLanes[0].yPosition ||
-                player->position.y == riverLanes[1].yPosition ||
-                player->position.y == riverLanes[2].yPosition ||
-                player->position.y == riverLanes[3].yPosition) {
-                if (!isPlayerOnLog)
-                    isGameOver = 1;
-            }
+        if (player->position.y < RIVER_LOWER_BOUNDARY && player->position.y > RIVER_UPPER_BOUNDARY) {
+            if (!isPlayerOnLog)
+                isGameOver = 1;
         }
 
         // Spawn new NPCs

@@ -14,7 +14,7 @@
 #define PLAYER_STEP BLOCK_SIZE
 #define CAR_CHANCE 5
 #define GATOR_CHANCE 1
-#define LOG_CHANCE 10
+#define LOG_CHANCE 15
 
 // Global variables
 extern int isGameOver;
@@ -22,11 +22,11 @@ extern char* screenText;
 extern float hopTimer;
 
 // Function prototypes
-void initGame(character* player, NpcData* npcData);
-void updateGame(character* player, NpcData* npcData);
-void drawGame(character* player, NpcData* npcData);
+void initGame(character* player, NpcData* npcData, character** hats);
+void updateGame(character* player, NpcData* npcData, character** hats);
+void drawGame(character* player, NpcData* npcData, character** hats);
 void handlePlayerMovement(character* player);
 character* spawnEnemy(character* enemies, int* enemyCount, int enemyChance, char enemyType);
-void resetGame(character* player, NpcData* npcData);
+void resetGame(character* player, NpcData* npcData, character** hats);
 
 #endif

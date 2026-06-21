@@ -5,13 +5,14 @@
 #include "character.h"
 
 int isGameOver = 1; // Start the game in a "game over" state
-char* screenText = "PRESS ENTER TO START";
+char* topText = "PRESS ENTER TO START";
+char* centerText = "";
 float hopTimer = 0.0f;
 lane riverLanes[RIVER_LANE_COUNT];
 lane streetLanes[STREET_LANE_COUNT];
 int isPlayerOnLog = 0;
 
-void initGame(character* player, NpcData* npcData) {
+void initGame(character* player, NpcData* npcData, character** hats) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
     player->velocity = (Vector2){0, 0};
     player->width = PLAYER_SIZE;
@@ -36,6 +37,16 @@ void initGame(character* player, NpcData* npcData) {
     *npcData->logCount = 0;
     *npcData->cars = NULL;
     *npcData->carCount = 0;
+
+    // initialize hats (goals)
+    // Allocate memory for hats (e.g., 5 hats)
+    *hats = malloc(5 * sizeof(character));
+    for (int i = 0; i < 5; i++) {
+        (*hats)[i].position = (Vector2){4*BLOCK_SIZE + 4*i * BLOCK_SIZE, BLOCK_SIZE}; // Set positions for hats
+        (*hats)[i].width = BLOCK_SIZE;
+        (*hats)[i].height = BLOCK_SIZE;
+        (*hats)[i].color = MAROON;
+    }
 }
 
 void handlePlayerMovement(character* player) {
@@ -75,22 +86,22 @@ void handlePlayerMovement(character* player) {
     if (player->position.y > WINDOW_HEIGHT - player->height) player->position.y = WINDOW_HEIGHT - player->height;
 }
 
-void resetGame(character* player, NpcData* npcData) {
+void resetGame(character* player, NpcData* npcData, character** hats) {
     free(*npcData->cars);
     free(*npcData->gators);
     free(*npcData->logs);
 
     // Reset player
-    initGame(player, npcData);
+    initGame(player, npcData, hats);
 
     // Reset game state
     isGameOver = 0;
-    screenText = "";
+    centerText = "";
 }
 
-void updateGame(character* player, NpcData* npcData) {
+void updateGame(character* player, NpcData* npcData, character** hats) {
     if (!isGameOver) {
-        screenText = "";
+        topText = "";
         handlePlayerMovement(player);
 
         // Update positions and remove out-of-bounds
@@ -102,6 +113,7 @@ void updateGame(character* player, NpcData* npcData) {
         for (int i = 0; i < *npcData->carCount; i++) {
             if (collision(*player, (*npcData->cars)[i])) {
                 isGameOver = 1;
+                centerText = "GAME OVER";
                 break;
             }
         }
@@ -109,6 +121,7 @@ void updateGame(character* player, NpcData* npcData) {
         for (int i = 0; i < *npcData->gatorCount; i++) {
             if (collision(*player, (*npcData->gators)[i])) {
                 isGameOver = 1;
+                centerText = "GAME OVER";
                 break;
             }
         }
@@ -125,8 +138,24 @@ void updateGame(character* player, NpcData* npcData) {
         }
         // check if it's on the river
         if (player->position.y < RIVER_LOWER_BOUNDARY && player->position.y > RIVER_UPPER_BOUNDARY) {
-            if (!isPlayerOnLog)
+            if (!isPlayerOnLog) {
                 isGameOver = 1;
+                centerText = "GAME OVER";
+            }
+        }
+        // check if crossed the river
+        if (player->position.y < RIVER_UPPER_BOUNDARY) {
+            int hatCollided = 0;
+            for (int h = 0; h < 5; h++) {
+                if (collision(*player, (*hats)[h])) {
+                    centerText = "BONUS WIN!";
+                    hatCollided = 1;
+                    break;
+                }
+            }
+            if (!hatCollided)
+                centerText = "YOU WIN";
+            isGameOver = 1;
         }
 
         // Spawn new NPCs
@@ -134,7 +163,7 @@ void updateGame(character* player, NpcData* npcData) {
         *npcData->gators = spawnNpc(npcData, GATOR_CHANCE, 'G', riverLanes);
         *npcData->logs = spawnNpc(npcData, LOG_CHANCE, 'L', riverLanes);
     } else {
-        screenText = "GAME OVER - PRESS ENTER TO RESTART";
+        topText = "PRESS ENTER TO RESTART";
         // Stop cars when game is over
         for (int i = 0; i < *npcData->carCount; i++) {
             (*npcData->cars)[i].velocity.x = 0;
@@ -150,19 +179,18 @@ void updateGame(character* player, NpcData* npcData) {
 
         // Start or restart the game when ENTER is pressed
         if (IsKeyPressed(KEY_ENTER)) {
-            resetGame(player, npcData);
+            resetGame(player, npcData, hats);
         }
     }
 }
 
-void drawGame(character* player, NpcData* npcData) {
+void drawGame(character* player, NpcData* npcData, character** hats) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
-    DrawText(screenText, 10, 10, 20, DARKGRAY);
-
+    
     // draw river
     DrawRectangle(0, RIVER_UPPER_BOUNDARY, WINDOW_WIDTH, RIVER_LOWER_BOUNDARY - RIVER_UPPER_BOUNDARY, SKYBLUE);
-
+    
     // Draw street
     DrawRectangle(0, STREET_UPPER_BOUNDARY, WINDOW_WIDTH, STREET_LOWER_BOUNDARY - STREET_UPPER_BOUNDARY, DARKGRAY);
     
@@ -178,7 +206,17 @@ void drawGame(character* player, NpcData* npcData) {
     for (int i = 0; i < *npcData->logCount; i++) {
         DrawRectangleV((*npcData->logs)[i].position, (Vector2){(*npcData->logs)[i].width, (*npcData->logs)[i].height}, (*npcData->logs)[i].color);
     }
+    // draw hats
+    for (int i = 0; i < 5; i++) {
+        DrawRectangleV((*hats)[i].position, (Vector2){(*hats)[i].width, (*hats)[i].height}, (*hats)[i].color);
+    }
+    
     // Draw player
     DrawRectangleV(player->position, (Vector2){player->width, player->height}, player->color);
+    
+    // draw text
+    DrawText(topText, 10, 10, 20, DARKGRAY);
+    DrawText(centerText, WINDOW_WIDTH/2, WINDOW_HEIGHT/2, 40, GREEN);
+    
     EndDrawing();
 }

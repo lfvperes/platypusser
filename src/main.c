@@ -25,14 +25,16 @@ int main() {
     npcData.logs = &logs;
     int logCount = 0;
     npcData.logCount = &logCount;
+
+    character* hats = NULL;
     
     // lane* riverLane = NULL;
-    initGame(&player, &npcData);
+    initGame(&player, &npcData, &hats);
 
     // Game loop
     while (!WindowShouldClose()) {
-        updateGame(&player, &npcData);
-        drawGame(&player, &npcData);
+        updateGame(&player, &npcData, &hats);
+        drawGame(&player, &npcData, &hats);
     }
 
     // Cleanup

@@ -40,8 +40,8 @@ void initGame(character* player, NpcData* npcData, character** hats) {
 
     // initialize hats (goals)
     // Allocate memory for hats (e.g., 5 hats)
-    *hats = malloc(5 * sizeof(character));
-    for (int i = 0; i < 5; i++) {
+    *hats = malloc(HAT_COUNT * sizeof(character));
+    for (int i = 0; i < HAT_COUNT; i++) {
         (*hats)[i].position = (Vector2){4*BLOCK_SIZE + 4*i * BLOCK_SIZE, BLOCK_SIZE}; // Set positions for hats
         (*hats)[i].width = BLOCK_SIZE;
         (*hats)[i].height = BLOCK_SIZE;
@@ -146,7 +146,7 @@ void updateGame(character* player, NpcData* npcData, character** hats) {
         // check if crossed the river
         if (player->position.y < RIVER_UPPER_BOUNDARY) {
             int hatCollided = 0;
-            for (int h = 0; h < 5; h++) {
+            for (int h = 0; h < HAT_COUNT; h++) {
                 if (collision(*player, (*hats)[h])) {
                     centerText = "BONUS WIN!";
                     hatCollided = 1;
@@ -207,8 +207,8 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
         DrawRectangleV((*npcData->logs)[i].position, (Vector2){(*npcData->logs)[i].width, (*npcData->logs)[i].height}, (*npcData->logs)[i].color);
     }
     // draw hats
-    for (int i = 0; i < 5; i++) {
-        DrawRectangleV((*hats)[i].position, (Vector2){(*hats)[i].width, (*hats)[i].height}, (*hats)[i].color);
+    for (int i = 0; i < HAT_COUNT; i++) {
+        DrawCircleV((*hats)[i].position, (*hats)[i].width/2, (*hats)[i].color);
     }
     
     // Draw player

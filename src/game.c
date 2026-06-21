@@ -160,7 +160,7 @@ void updateGame(character* player, NpcData* npcData) {
     }
 }
 
-void drawGame(character player, character* cars, int carCount, character* gators, int gatorCount, character* logs, int logCount) {
+void drawGame(character* player, NpcData* npcData) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     DrawText(screenText, 10, 10, 20, DARKGRAY);
@@ -172,18 +172,18 @@ void drawGame(character player, character* cars, int carCount, character* gators
     DrawRectangle(0, STREET_UPPER_BOUNDARY, WINDOW_WIDTH, STREET_LOWER_BOUNDARY - STREET_UPPER_BOUNDARY, DARKGRAY);
     
     // Draw cars
-    for (int i = 0; i < carCount; i++) {
-        DrawRectangleV(cars[i].position, (Vector2){cars[i].width, cars[i].height}, cars[i].color);
+    for (int i = 0; i < *npcData->carCount; i++) {
+        DrawRectangleV((*npcData->cars)[i].position, (Vector2){(*npcData->cars)[i].width, (*npcData->cars)[i].height}, (*npcData->cars)[i].color);
     }
     // Draw gators
-    for (int i = 0; i < gatorCount; i++) {
-        DrawRectangleV(gators[i].position, (Vector2){gators[i].width, gators[i].height}, gators[i].color);
+    for (int i = 0; i < *npcData->gatorCount; i++) {
+        DrawRectangleV((*npcData->gators)[i].position, (Vector2){(*npcData->gators)[i].width, (*npcData->gators)[i].height}, (*npcData->gators)[i].color);
     }
     // Draw logs
-    for (int i = 0; i < logCount; i++) {
-        DrawRectangleV(logs[i].position, (Vector2){logs[i].width, logs[i].height}, logs[i].color);
+    for (int i = 0; i < *npcData->logCount; i++) {
+        DrawRectangleV((*npcData->logs)[i].position, (Vector2){(*npcData->logs)[i].width, (*npcData->logs)[i].height}, (*npcData->logs)[i].color);
     }
     // Draw player
-    DrawRectangleV(player.position, (Vector2){player.width, player.height}, player.color);
+    DrawRectangleV(player->position, (Vector2){player->width, player->height}, player->color);
     EndDrawing();
 }

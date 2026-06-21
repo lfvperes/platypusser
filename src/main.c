@@ -7,6 +7,7 @@ int main() {
     // Initialization
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Platypus Game");
     SetTargetFPS(60);
+    
     character player;
     NpcData npcData;
     
@@ -30,7 +31,7 @@ int main() {
     // Game loop
     while (!WindowShouldClose()) {
         updateGame(&player, &npcData);
-        drawGame(player, *npcData.cars, *npcData.carCount, *npcData.gators, *npcData.gatorCount, *npcData.logs, *npcData.logCount);
+        drawGame(&player, &npcData);
     }
 
     // Cleanup

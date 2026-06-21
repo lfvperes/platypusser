@@ -21,7 +21,7 @@
 #define RIVER_LANE_2_SPEED 2
 #define RIVER_LANE_3_SPEED 1
 #define RIVER_LANE_4_SPEED 2
-#define RIVER_MAX_SPEED 4
+#define RIVER_MAX_SPEED 3
 #define RIVER_MIN_SPEED 1
 // river boundaries
 #define RIVER_UPPER_BOUNDARY 2*LANE_SIZE

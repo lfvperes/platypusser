@@ -15,7 +15,7 @@
 #define LANE_2 LANE_SIZE * 12
 #define LANE_3 LANE_SIZE * 14
 #define LANE_4 LANE_SIZE * 16
-#define STREET_MAX_SPEED 4
+#define STREET_MAX_SPEED 5
 #define STREET_MIN_SPEED 1
 // street boundaries
 #define STREET_UPPER_BOUNDARY WINDOW_HEIGHT/2 

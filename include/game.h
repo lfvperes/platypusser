@@ -14,12 +14,11 @@
 #define PLAYER_STEP BLOCK_SIZE
 #define CAR_CHANCE 5
 #define GATOR_CHANCE 1
-#define LOG_CHANCE 15
+#define LOG_CHANCE 20
 #define HAT_COUNT 5
 
 // Global variables
 extern int isGameOver;
-extern char* screenText;
 extern float hopTimer;
 
 // Function prototypes

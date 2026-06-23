@@ -28,6 +28,8 @@ int main() {
 
     character* hats = NULL;
     
+    npcData.carTextures = loadTextures("assets/car", MAX_CAR_TEXTURES);
+
     // lane* riverLane = NULL;
     initGame(&player, &npcData, &hats);
 
@@ -41,6 +43,9 @@ int main() {
     free(*npcData.cars);
     free(*npcData.gators);
     free(*npcData.logs);
+    for (int i = 0; i < MAX_CAR_TEXTURES; i++)
+        UnloadTexture(npcData.carTextures[i]);
+    free(npcData.carTextures);
     CloseWindow();
     return 0;
 }

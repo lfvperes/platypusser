@@ -20,7 +20,7 @@ int collision(character a, character b) {
 character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) {
     Color spawnColor;
     int* npcCount;
-    int width, height;
+    int width, height, textureIndex;
     character** npcs;
     int minLane = 1, maxLane;
 
@@ -49,6 +49,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             width = CAR_LENGTH;
             height = CAR_HEIGHT;
             maxLane = STREET_LANE_COUNT;
+            textureIndex = GetRandomValue(0, MAX_CAR_TEXTURES - 1);
             break;
         default:
             return *npcs; // Invalid NPC type, return unchanged
@@ -90,6 +91,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
         (*npcs)[*npcCount].height = height;
         (*npcs)[*npcCount].position = (Vector2){-(*npcs)[*npcCount].width, laneY};
         (*npcs)[*npcCount].color = spawnColor;
+        if (npcType == 'C') (*npcs)[*npcCount].textureIndex = textureIndex;
         (*npcCount)++;
     }
     return *npcs;
@@ -114,4 +116,14 @@ void updateNpcPosition(character** npcs, int* npcCount) {
             }
         }
     }
+}
+
+Texture2D* loadTextures(char* basePath, int count) {
+    char* fullPath;
+    Texture2D* textures = malloc(count * sizeof(Texture2D));
+    for (int i = 1; i <= count; i++) {
+        fullPath = TextFormat("%s%d.png", basePath, i);
+        textures[i-1] = LoadTexture(fullPath);
+    }
+    return textures;
 }

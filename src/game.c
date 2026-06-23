@@ -196,7 +196,16 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     
     // Draw cars
     for (int i = 0; i < *npcData->carCount; i++) {
-        DrawRectangleV((*npcData->cars)[i].position, (Vector2){(*npcData->cars)[i].width, (*npcData->cars)[i].height}, (*npcData->cars)[i].color);
+        // DrawRectangleV((*npcData->cars)[i].position, (Vector2){(*npcData->cars)[i].width, (*npcData->cars)[i].height}, (*npcData->cars)[i].color);
+        Texture2D tex = npcData->carTextures[(*npcData->cars)[i].textureIndex];
+        DrawTexturePro(
+            tex,
+            (Rectangle){0, 0, tex.width, tex.height},
+            (Rectangle){(*npcData->cars)[i].position.x, (*npcData->cars)[i].position.y, (*npcData->cars)[i].width, (*npcData->cars)[i].height}, // dest: where on screen
+            (Vector2){0, 0}, // origin for rotation
+            0.0f,            // rotation
+            WHITE  
+        );
     }
     // Draw gators
     for (int i = 0; i < *npcData->gatorCount; i++) {

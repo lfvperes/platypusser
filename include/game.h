@@ -16,6 +16,7 @@
 #define GATOR_CHANCE 1
 #define LOG_CHANCE 20
 #define HAT_COUNT 5
+#define MAX_CAR_TEXTURES 11
 
 // Global variables
 extern int isGameOver;

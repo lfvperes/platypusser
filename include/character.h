@@ -12,6 +12,7 @@ typedef struct {
     int width;
     int height;
     Color color;
+    int textureIndex;
 } character;
 
 typedef struct NpcData {
@@ -21,10 +22,12 @@ typedef struct NpcData {
     int* logCount;
     character** cars;
     int* carCount;
+    Texture2D* carTextures;
 } NpcData;
 
 int collision(character a, character b);
 character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes);
 void updateNpcPosition(character** npcs, int* npcCount);
+Texture2D* loadTextures(char* basePath, int count);
 
 #endif

@@ -209,7 +209,16 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     }
     // Draw gators
     for (int i = 0; i < *npcData->gatorCount; i++) {
-        DrawRectangleV((*npcData->gators)[i].position, (Vector2){(*npcData->gators)[i].width, (*npcData->gators)[i].height}, (*npcData->gators)[i].color);
+        // DrawRectangleV((*npcData->gators)[i].position, (Vector2){(*npcData->gators)[i].width, (*npcData->gators)[i].height}, (*npcData->gators)[i].color);
+        Texture2D tex = npcData->gatorTextures[(*npcData->gators)[i].textureIndex];
+        DrawTexturePro(
+            tex,
+            (Rectangle){0, 0, tex.width, tex.height},
+            (Rectangle){(*npcData->gators)[i].position.x, (*npcData->gators)[i].position.y, (*npcData->gators)[i].width, (*npcData->gators)[i].height},
+            (Vector2){0, 0}, // origin for rotation
+            0.0f,            // rotation
+            WHITE  
+        );
     }
     // Draw logs
     for (int i = 0; i < *npcData->logCount; i++) {

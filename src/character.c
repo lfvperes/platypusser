@@ -33,6 +33,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             width = GATOR_LENGTH;
             height = GATOR_HEIGHT;
             maxLane = RIVER_LANE_COUNT;
+            textureIndex = 0;
             break;
         case 'L':
             spawnColor = BROWN;
@@ -91,7 +92,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
         (*npcs)[*npcCount].height = height;
         (*npcs)[*npcCount].position = (Vector2){-(*npcs)[*npcCount].width, laneY};
         (*npcs)[*npcCount].color = spawnColor;
-        if (npcType == 'C') (*npcs)[*npcCount].textureIndex = textureIndex;
+        if (npcType == 'C' || npcType == 'G') (*npcs)[*npcCount].textureIndex = textureIndex;
         (*npcCount)++;
     }
     return *npcs;
@@ -118,8 +119,8 @@ void updateNpcPosition(character** npcs, int* npcCount) {
     }
 }
 
-Texture2D* loadTextures(char* basePath, int count) {
-    char* fullPath;
+Texture2D* loadTextures(const char* basePath, int count) {
+    const char* fullPath;
     Texture2D* textures = malloc(count * sizeof(Texture2D));
     for (int i = 1; i <= count; i++) {
         fullPath = TextFormat("%s%d.png", basePath, i);

@@ -23,11 +23,12 @@ typedef struct NpcData {
     character** cars;
     int* carCount;
     Texture2D* carTextures;
+    Texture2D* gatorTextures;
 } NpcData;
 
 int collision(character a, character b);
 character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes);
 void updateNpcPosition(character** npcs, int* npcCount);
-Texture2D* loadTextures(char* basePath, int count);
+Texture2D* loadTextures(const char* basePath, int count);
 
 #endif

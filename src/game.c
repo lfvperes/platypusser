@@ -222,7 +222,16 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     }
     // Draw logs
     for (int i = 0; i < *npcData->logCount; i++) {
-        DrawRectangleV((*npcData->logs)[i].position, (Vector2){(*npcData->logs)[i].width, (*npcData->logs)[i].height}, (*npcData->logs)[i].color);
+        // DrawRectangleV((*npcData->logs)[i].position, (Vector2){(*npcData->logs)[i].width, (*npcData->logs)[i].height}, (*npcData->logs)[i].color);
+        Texture2D tex = npcData->logTextures[(*npcData->logs)[i].textureIndex];
+        DrawTexturePro(
+            tex,
+            (Rectangle){0, 0, tex.width, tex.height},
+            (Rectangle){(*npcData->logs)[i].position.x, (*npcData->logs)[i].position.y, (*npcData->logs)[i].width, (*npcData->logs)[i].height},
+            (Vector2){0, 0}, // origin for rotation
+            0.0f,            // rotation
+            WHITE  
+        );
     }
     // draw hats
     for (int i = 0; i < HAT_COUNT; i++) {

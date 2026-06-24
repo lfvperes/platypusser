@@ -42,6 +42,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
             width = GetRandomValue(LOG_MIN_LENGTH, LOG_MAX_LENGTH);
             height = LOG_HEIGHT;
             maxLane = RIVER_LANE_COUNT;
+            textureIndex = 0;
             break;
         case 'C':
             spawnColor = colors[GetRandomValue(0, MAX_COLORS_COUNT - 1)];
@@ -92,7 +93,7 @@ character* spawnNpc(NpcData* npcData, int npcChance, char npcType, lane* lanes) 
         (*npcs)[*npcCount].height = height;
         (*npcs)[*npcCount].position = (Vector2){-(*npcs)[*npcCount].width, laneY};
         (*npcs)[*npcCount].color = spawnColor;
-        if (npcType == 'C' || npcType == 'G') (*npcs)[*npcCount].textureIndex = textureIndex;
+        (*npcs)[*npcCount].textureIndex = textureIndex;
         (*npcCount)++;
     }
     return *npcs;

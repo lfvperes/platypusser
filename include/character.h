@@ -24,6 +24,7 @@ typedef struct NpcData {
     int* carCount;
     Texture2D* carTextures;
     Texture2D* gatorTextures;
+    Texture2D* logTextures;
 } NpcData;
 
 int collision(character a, character b);

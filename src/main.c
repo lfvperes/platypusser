@@ -31,6 +31,8 @@ int main() {
     npcData.carTextures = loadTextures("assets/car", MAX_CAR_TEXTURES);
     npcData.gatorTextures = loadTextures("assets/alligator", 1);
     npcData.logTextures = loadTextures("assets/log", 1);
+    Texture2D playerTexture = LoadTexture("assets/platypus1.png");
+    Texture2D hatTexture = LoadTexture("assets/hat1.png");
 
     // lane* riverLane = NULL;
     initGame(&player, &npcData, &hats);
@@ -38,7 +40,7 @@ int main() {
     // Game loop
     while (!WindowShouldClose()) {
         updateGame(&player, &npcData, &hats);
-        drawGame(&player, &npcData, &hats);
+        drawGame(&player, &npcData, &hats, playerTexture, hatTexture);
     }
 
     // Cleanup
@@ -49,6 +51,8 @@ int main() {
         UnloadTexture(npcData.carTextures[i]);
     UnloadTexture(npcData.gatorTextures[0]);
     UnloadTexture(npcData.logTextures[0]);
+    UnloadTexture(playerTexture);
+    UnloadTexture(hatTexture);
     free(npcData.carTextures);
     free(npcData.gatorTextures);
     free(npcData.logTextures);

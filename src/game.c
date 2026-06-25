@@ -184,7 +184,7 @@ void updateGame(character* player, NpcData* npcData, character** hats) {
     }
 }
 
-void drawGame(character* player, NpcData* npcData, character** hats) {
+void drawGame(character* player, NpcData* npcData, character** hats, Texture2D playerTexture, Texture2D hatTexture) {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     
@@ -196,7 +196,6 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     
     // Draw cars
     for (int i = 0; i < *npcData->carCount; i++) {
-        // DrawRectangleV((*npcData->cars)[i].position, (Vector2){(*npcData->cars)[i].width, (*npcData->cars)[i].height}, (*npcData->cars)[i].color);
         Texture2D tex = npcData->carTextures[(*npcData->cars)[i].textureIndex];
         DrawTexturePro(
             tex,
@@ -209,7 +208,6 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     }
     // Draw gators
     for (int i = 0; i < *npcData->gatorCount; i++) {
-        // DrawRectangleV((*npcData->gators)[i].position, (Vector2){(*npcData->gators)[i].width, (*npcData->gators)[i].height}, (*npcData->gators)[i].color);
         Texture2D tex = npcData->gatorTextures[(*npcData->gators)[i].textureIndex];
         DrawTexturePro(
             tex,
@@ -222,7 +220,6 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     }
     // Draw logs
     for (int i = 0; i < *npcData->logCount; i++) {
-        // DrawRectangleV((*npcData->logs)[i].position, (Vector2){(*npcData->logs)[i].width, (*npcData->logs)[i].height}, (*npcData->logs)[i].color);
         Texture2D tex = npcData->logTextures[(*npcData->logs)[i].textureIndex];
         DrawTexturePro(
             tex,
@@ -235,7 +232,15 @@ void drawGame(character* player, NpcData* npcData, character** hats) {
     }
     // draw hats
     for (int i = 0; i < HAT_COUNT; i++) {
-        DrawCircleV((*hats)[i].position, (*hats)[i].width/2, (*hats)[i].color);
+        // DrawCircleV((*hats)[i].position, (*hats)[i].width/2, (*hats)[i].color);
+        DrawTexturePro(
+            hatTexture,
+            (Rectangle){0, 0, hatTexture.width, hatTexture.height},
+            (Rectangle){(*hats)[i].position.x, (*hats)[i].position.y, (*hats)[i].width, (*hats)[i].height},
+            (Vector2){0, 0},
+            0.0f,
+            WHITE
+        );
     }
     
     // Draw player

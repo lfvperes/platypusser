@@ -25,7 +25,7 @@ extern float hopTimer;
 // Function prototypes
 void initGame(character* player, NpcData* npcData, character** hats);
 void updateGame(character* player, NpcData* npcData, character** hats);
-void drawGame(character* player, NpcData* npcData, character** hats);
+void drawGame(character* player, NpcData* npcData, character** hats, Texture2D playerTexture, Texture2D hatTexture);
 void handlePlayerMovement(character* player);
 character* spawnEnemy(character* enemies, int* enemyCount, int enemyChance, char enemyType);
 void resetGame(character* player, NpcData* npcData, character** hats);

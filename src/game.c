@@ -15,7 +15,7 @@ int isPlayerOnLog = 0;
 void initGame(character* player, NpcData* npcData, character** hats) {
     player->position = (Vector2){WINDOW_WIDTH / 2, WINDOW_HEIGHT - PLAYER_SIZE};
     player->velocity = (Vector2){0, 0};
-    player->width = PLAYER_SIZE;
+    player->width = 2*PLAYER_SIZE;
     player->height = PLAYER_SIZE;
     player->color = GREEN;
 
@@ -232,7 +232,6 @@ void drawGame(character* player, NpcData* npcData, character** hats, Texture2D p
     }
     // draw hats
     for (int i = 0; i < HAT_COUNT; i++) {
-        // DrawCircleV((*hats)[i].position, (*hats)[i].width/2, (*hats)[i].color);
         DrawTexturePro(
             hatTexture,
             (Rectangle){0, 0, hatTexture.width, hatTexture.height},
@@ -244,7 +243,15 @@ void drawGame(character* player, NpcData* npcData, character** hats, Texture2D p
     }
     
     // Draw player
-    DrawRectangleV(player->position, (Vector2){player->width, player->height}, player->color);
+    // DrawRectangleV(player->position, (Vector2){player->width, player->height}, player->color);
+    DrawTexturePro(
+        playerTexture,
+        (Rectangle){0, 0, playerTexture.width, playerTexture.height},
+        (Rectangle){player->position.x, player->position.y, player->width, player->height},
+        (Vector2){0, 0},
+        0.0f,
+        WHITE
+    );
     
     // draw text
     DrawText(topText, 10, 10, 20, DARKGRAY);

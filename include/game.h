@@ -4,6 +4,7 @@
 #include "raylib.h"
 #include "character.h"
 #include "lane.h"
+#include "scores.h"
 
 // Constants
 #define DELAY 0.2
@@ -21,6 +22,19 @@
 // Global variables
 extern int isGameOver;
 extern float hopTimer;
+
+// timer
+extern float elapsedTime;
+
+// name input state
+extern int isEnteringName;
+extern char playerName[4]; // 3 letters + '\0'
+extern int nameCharIndex;
+
+// scores and stats
+extern Score scores[MAX_SCORES];
+extern int scoreCount;
+extern Stats stats;
 
 // Function prototypes
 void initGame(character* player, NpcData* npcData, character** hats);

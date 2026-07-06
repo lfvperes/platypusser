@@ -276,7 +276,7 @@ static void drawScoreboard() {
 // Draws the 3-letter name entry screen after a win
 static void drawNameEntry() {
     // Background panel: prompt (20px font) + letters (40px font) + hint (14px font) + padding
-    DrawRectangle(WINDOW_WIDTH/2 - 185, WINDOW_HEIGHT/2 - 70, 490, 130, RAYWHITE);
+    DrawRectangle(0, WINDOW_HEIGHT/2 - 70, WINDOW_WIDTH, 130, RAYWHITE);
 
     DrawText("VOCE VENCEU! INSIRA SEU NOME:", WINDOW_WIDTH/2 - 180, WINDOW_HEIGHT/2 - 60, 20, DARKBLUE);
 

@@ -31,19 +31,38 @@ Uma característica interessante específica do Frogger é que a **verificação
 ## Conceitos implementados
 
 - **Estruturas de controle:** `if/else`, `for`, `while`, `switch`
-  - `if/else` — detecção de colisões, verificação de limites da tela e do rio, lógica de vitória/derrota
-  - `for` — laço principal de atualização e desenho dos NPCs, inicialização de faixas e chapéus, inserção ordenada no placar
-  - `while` — laço principal do jogo (`while (!WindowShouldClose())` em `main.c`) e leitura do arquivo de pontuações
-  - `switch` — em `spawnNpc`, determina os atributos de cada tipo de NPC (carro, jacaré, tronco) a partir de um `char` identificador
+  - `if/else`: detecção de colisões, verificação de limites da tela e do rio, lógica de vitória/derrota
+  - `for`: laço principal de atualização e desenho dos NPCs, inicialização de faixas e chapéus, inserção ordenada no placar
+  - `while`: laço principal do jogo (`while (!WindowShouldClose())` em `main.c`) e leitura do arquivo de pontuações
+  - `switch`: em `spawnNpc`, determina os atributos de cada tipo de NPC (carro, jacaré, tronco) a partir de um `char` identificador
 - **Typedefs e structs:** `character`, `NpcData`, `lane`, `Score`, `Stats`
-  - `character` — representa qualquer entidade móvel do jogo (jogador, carros, jacarés, troncos, chapéus). Armazena posição, velocidade, dimensões, cor (para a implementação sem texturas) e índice de textura.
-  - `lane` — representa uma faixa da rua ou do rio, com velocidade e posição vertical.
-  - `Score` e `Stats` — usadas para persistência: `Score` guarda nome (3 letras), tempo e data de uma entrada do placar; `Stats` guarda o total de vitórias e derrotas.
-  - `NpcData` — agrupa os ponteiros para os vetores de carros, jacarés e troncos, seus contadores, e os vetores de texturas correspondentes. Essa decisão foi tomada por quatro razões: evitar assinaturas de função excessivamente longas; permitir que funções como `spawnNpc` e `updateNpcPosition` sejam **agnósticas ao tipo de NPC** — uma única função serve para os três tipos, usando um `char` para distingui-los via `switch`; refletir no código que carros, jacarés e troncos são conceitualmente a mesma coisa (NPCs); e facilitar a adição de novos tipos de NPC no futuro (exemplo: tartarugas, como no Frogger original) sem alterar nenhuma assinatura.
-- **Alocação dinâmica:** `malloc`, `realloc`, `free` — vetores de carros, jacarés e troncos crescem e encolhem em tempo real
-- **Vetores e strings:** vetor de texturas, vetor de pontuações, nome do jogador (`char[4]`)
-- **Funções:** passagem por valor e por referência (ponteiros), funções estáticas auxiliares
-- **Manipulação de arquivos:** `scores.txt` (top 5 tempos) e `stats.txt` (vitórias/derrotas) — lidos na inicialização e escritos a cada fim de partida
+  - `character`: representa qualquer entidade móvel do jogo (jogador, carros, jacarés, troncos, chapéus). Armazena posição, velocidade, dimensões, cor (para a implementação sem texturas) e índice de textura.
+  - `lane`: representa uma faixa da rua ou do rio, com velocidade e posição vertical.
+  - `Score` e `Stats`: usadas para persistência: `Score` guarda nome (3 letras), tempo e data de uma entrada do placar; `Stats` guarda o total de vitórias e derrotas.
+  - `NpcData`: agrupa os ponteiros para os vetores de carros, jacarés e troncos, seus contadores, e os vetores de texturas correspondentes. Essa decisão foi tomada por quatro razões: evitar assinaturas de função excessivamente longas; permitir que funções como `spawnNpc` e `updateNpcPosition` sejam **agnósticas ao tipo de NPC**, uma única função serve para os três tipos, usando um `char` para distingui-los via `switch`; refletir no código que carros, jacarés e troncos são conceitualmente a mesma coisa (NPCs); e facilitar a adição de novos tipos de NPC no futuro (exemplo: tartarugas, como no Frogger original) sem alterar nenhuma assinatura.
+- **Alocação dinâmica:** `malloc`, `realloc`, `free`: os vetores de NPCs não têm tamanho fixo; crescem e encolhem frame a frame conforme o jogo roda
+
+  - `realloc` em `spawnNpc`: cada vez que um novo NPC é sorteado para aparecer, o vetor correspondente (carros, jacarés ou troncos) é expandido em um elemento
+  - `realloc` e `free` em `updateNpcPosition`: quando um NPC sai pela borda direita da tela, é removido por deslocamento do vetor e o bloco é reduzido com `realloc`; se o vetor ficar vazio, é liberado com `free` e o ponteiro é zerado para `NULL`
+  - `malloc` em `initGame`: aloca o vetor de chapéus (objetivos) e o vetor de texturas carregadas do disco
+  - `free` em `resetGame`: libera os três vetores de NPCs antes de reinicializar o jogo, evitando vazamento de memória entre partidas
+- **Vetores e strings:** arrays de tamanho fixo e ponteiros para arrays dinâmicos usados em todo o projeto
+
+  - `riverLanes[RIVER_LANE_COUNT]` e `streetLanes[STREET_LANE_COUNT]`: arrays estáticos de `lane` que definem as faixas do rio e da rua, inicializados em `initGame`
+  - `carTextures`, `gatorTextures`, `logTextures`: arrays de `Texture2D` alocados dinamicamente por `loadTextures`, que carrega os arquivos PNG do disco e retorna um ponteiro para o vetor
+  - `scores[MAX_SCORES]`: array estático de `Score` que armazena o top 5 carregado do arquivo
+  - `colors[MAX_COLORS_COUNT]`: array estático de `Color` usado para sortear a cor dos carros ao spawnar
+  - `playerName[4]`: string de 3 caracteres (+ `'\0'`) que armazena o nome digitado pelo jogador após uma vitória; manipulada char a char durante a entrada de nome
+  - `topText` e `centerText`: ponteiros para strings literais trocados conforme o estado do jogo para exibir mensagens na tela
+- **Funções:** código modularizado em arquivos separados por responsabilidade — `game.c`, `character.c`, `lane.c`, `scores.c`
+
+  - Passagem por valor: `collision` recebe dois `character` copiados, sem modificar os originais
+  - Passagem por referência: `spawnNpc` e `updateNpcPosition` recebem ponteiros para os vetores de NPCs e seus contadores, permitindo modificar os dados diretamente
+  - Funções estáticas: `handleNameEntry`, `drawScoreboard` e `drawNameEntry` são declaradas `static` em `game.c`, ficando invisíveis para os demais arquivos
+- **Manipulação de arquivos:** leitura e escrita em dois arquivos de texto criados automaticamente na primeira partida
+
+  - `scores.txt`: armazena o top 5 de melhores tempos no formato `NOME TEMPO DATA` (ex: `AAA 12.34 2026-07-05`); lido em `loadScores` na inicialização e reescrito integralmente em `saveScores` após cada vitória confirmada
+  - `stats.txt`: armazena o contador de vitórias e derrotas no formato `wins N losses N`; lido em `loadStats` na inicialização e atualizado em `saveStats` a cada fim de partida, seja vitória ou derrota
 
 ## Ambiente de desenvolvimento
 
@@ -118,9 +137,7 @@ Os arquivos `scores.txt` e `stats.txt` são criados automaticamente na pasta do 
 
 > 🎥 Vídeo em breve.
 
-## Repositório
-
-https://github.com/lfvperes/platypusser
+![Demonstração em video](screencast.mp4)
 
 ## Versão online usando o OneCompiler
 

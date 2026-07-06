@@ -134,11 +134,8 @@ platypusser/
 Os arquivos `scores.txt` e `stats.txt` são criados automaticamente na pasta do executável após a primeira partida.
 
 ## Demonstração
-
-<video width="320" height="240" controls>
-  <source src="screencast.mp4" type="video/mp4">
-</video>
-
+(Clique para assistir)
+[![Clique para assistir](screencast_screenshot.png)](screencast.mp4)
 
 ## Versão online usando o OneCompiler
 
